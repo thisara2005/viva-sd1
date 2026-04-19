@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viva Practice — Recipe Manager (4COSC006C)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f1117 100%);
+    border-bottom: 1px solid #2d3748;
+    padding: 20px 30px;
+  }
+  header h1 { font-size: 1.3rem; color: #63b3ed; font-weight: 700; }
+  header p { font-size: 0.78rem; color: #718096; margin-top: 3px; }
+
+  .layout { display: flex; height: calc(100vh - 75px); }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px; min-width: 220px;
+    background: #161b27;
+    border-right: 1px solid #2d3748;
+    overflow-y: auto;
+    padding: 14px 0;
+  }
+  .sidebar-section { padding: 6px 16px 4px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #4a5568; font-weight: 700; }
+  .tag-btn {
+    display: block; width: 100%; text-align: left;
+    padding: 8px 16px; font-size: 0.8rem;
+    background: none; border: none; color: #a0aec0;
+    cursor: pointer; transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .tag-btn:hover { background: #1a2233; color: #e2e8f0; }
+  .tag-btn.active { background: #1a2a3a; color: #63b3ed; border-left-color: #63b3ed; }
+  .tag-btn .count { float: right; background: #2d3748; border-radius: 9px; padding: 1px 7px; font-size: 0.7rem; }
+
+  /* Main area */
+  .main { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+  .progress-bar-wrap { background: #2d3748; border-radius: 99px; height: 6px; margin-bottom: 20px; }
+  .progress-bar-fill { height: 6px; border-radius: 99px; background: linear-gradient(90deg, #3182ce, #63b3ed); transition: width 0.4s; }
+  .progress-label { font-size: 0.72rem; color: #718096; margin-bottom: 6px; }
+
+  .card {
+    background: #1a1f2e;
+    border: 1px solid #2d3748;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #4a5568; }
+
+  .card-meta {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  }
+  .badge {
+    font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge-task1 { background: #1a3a4a; color: #63b3ed; }
+  .badge-task2 { background: #1a3a2a; color: #68d391; }
+  .badge-task3 { background: #3a2a1a; color: #f6ad55; }
+  .badge-task4 { background: #2a1a3a; color: #b794f4; }
+  .badge-design { background: #3a1a2a; color: #fc8181; }
+  .badge-tricky { background: #3a1a1a; color: #fc4040; }
+
+  .difficulty {
+    font-size: 0.65rem; color: #4a5568; margin-left: auto;
+  }
+  .difficulty.hard { color: #fc8181; }
+  .difficulty.medium { color: #f6ad55; }
+  .difficulty.easy { color: #68d391; }
+
+  .question { font-size: 0.97rem; font-weight: 600; color: #e2e8f0; line-height: 1.5; margin-bottom: 14px; }
+
+  .code-snip {
+    background: #0d1117; border: 1px solid #2d3748; border-radius: 8px;
+    padding: 12px 14px; font-family: 'Consolas', monospace; font-size: 0.78rem;
+    color: #a8d8a8; margin: 10px 0 14px; white-space: pre-wrap; line-height: 1.6;
+  }
+
+  .reveal-btn {
+    background: #1e3a5f; color: #63b3ed; border: 1px solid #2b5282;
+    padding: 8px 18px; border-radius: 8px; font-size: 0.82rem;
+    cursor: pointer; transition: all 0.15s; font-weight: 600;
+  }
+  .reveal-btn:hover { background: #2b5282; }
+
+  .answer {
+    display: none;
+    margin-top: 14px;
+    background: #0f1a2a;
+    border-left: 3px solid #3182ce;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    font-size: 0.87rem;
+    color: #cbd5e0;
+    line-height: 1.7;
+  }
+  .answer.visible { display: block; }
+  .answer strong { color: #90cdf4; }
+  .answer .code { background: #0d1117; border-radius: 5px; padding: 2px 6px; font-family: monospace; font-size: 0.82rem; color: #a8d8a8; }
+
+  .tip {
+    margin-top: 10px;
+    background: #1a2a1a;
+    border-left: 3px solid #48bb78;
+    border-radius: 0 6px 6px 0;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    color: #9ae6b4;
+  }
+  .tip::before { content: "💡 Tip: "; font-weight: 700; }
+
+  .no-results { text-align: center; padding: 60px 20px; color: #4a5568; font-size: 0.9rem; }
+
+  .stats-row {
+    display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .stat-box {
+    background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px;
+    padding: 12px 18px; text-align: center; min-width: 80px;
+  }
+  .stat-box .num { font-size: 1.4rem; font-weight: 700; color: #63b3ed; }
+  .stat-box .lbl { font-size: 0.65rem; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎓 Viva Practice — Digital Recipe Book Manager</h1>
+  <p>4COSC006C Software Development I &nbsp;|&nbsp; W2212870 &nbsp;|&nbsp; Click any question to reveal the answer</p>
+</header>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-section">Filter by</div>
+    <button class="tag-btn active" onclick="filter('all')">All Questions <span class="count" id="c-all">0</span></button>
+    <div class="sidebar-section">Task</div>
+    <button class="tag-btn" onclick="filter('task1')">Task 1 — Validation <span class="count" id="c-task1">0</span></button>
+    <button class="tag-btn" onclick="filter('task2')">Task 2 — Storage <span class="count" id="c-task2">0</span></button>
+    <button class="tag-btn" onclick="filter('task3')">Task 3 — Files <span class="count" id="c-task3">0</span></button>
+    <button class="tag-btn" onclick="filter('task4')">Task 4 — Features <span class="count" id="c-task4">0</span></button>
+    <div class="sidebar-section">Type</div>
+    <button class="tag-btn" onclick="filter('design')">Design &amp; Report <span class="count" id="c-design">0</span></button>
+    <button class="tag-btn" onclick="filter('tricky')">⚠ Tricky / Bugs <span class="count" id="c-tricky">0</span></button>
+  </div>
+
+  <div class="main">
+    <div class="stats-row">
+      <div class="stat-box"><div class="num" id="stat-total">0</div><div class="lbl">Questions</div></div>
+      <div class="stat-box"><div class="num" id="stat-revealed">0</div><div class="lbl">Revealed</div></div>
+      <div class="stat-box"><div class="num" id="stat-pct">0%</div><div class="lbl">Coverage</div></div>
+    </div>
+    <div class="progress-label" id="prog-label">0 of 0 answered</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-bar" style="width:0%"></div></div>
+    <div id="cards-container"></div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // ── TASK 1 ──────────────────────────────────────────────────────────
+  {
+    tags: ['task1'],
+    badge: 'task1', label: 'Task 1',
+    difficulty: 'easy',
+    q: "Why did you use a <code>while True</code> loop in <code>get_recipe_name()</code> instead of just checking the input once?",
+    answer: `A <strong>while True loop</strong> keeps re-prompting the user until they provide valid input. Without it, the program would either crash or silently accept bad data if the first input was wrong. The loop only exits when a <strong>return</strong> statement is reached — meaning the input passed all checks.`,
+    tip: "Mention that this pattern is used in all your validation functions — it's a deliberate design choice, not just habit."
+  },
+  {
+    tags: ['task1'],
+    badge: 'task1', label: 'Task 1',
+    difficulty: 'medium',
+    q: "In <code>get_recipe_name()</code>, you wrote <code>if has_letter == True</code>. Is there a more Pythonic way to write that? Would it change anything?",
+    code: `if has_letter == True:\n    return name`,
+    answer: `Yes — the Pythonic way is simply <span class="code">if has_letter:</span>. In Python, comparing a boolean to <strong>True</strong> using <strong>==</strong> is redundant because the variable is already a boolean. Both versions produce identical results — it's purely a style improvement.`,
+    tip: "Acknowledge you're aware of this. Saying 'I know it can be simplified to if has_letter:' shows self-awareness."
+  },
+  {
+    tags: ['task1'],
+    badge: 'task1', label: 'Task 1',
+    difficulty: 'medium',
+    q: "In <code>get_single_ingredient()</code>, why does the duplicate check allow the user to continue anyway if they type 'yes'?",
+    answer: `The requirement says ingredients <em>should</em> be unique, but sometimes a cook might legitimately want to add the same ingredient twice in different forms (e.g. fresh garlic and garlic powder, both named 'Garlic'). The soft warning gives the user control while still flagging the issue. It's a <strong>user-friendly validation</strong> rather than a hard block.`,
+    tip: "Point to line 58 in your code where the condition checks: if is_dup AND the user doesn't confirm 'yes', then continue."
+  },
+  {
+    tags: ['task1'],
+    badge: 'task1', label: 'Task 1',
+    difficulty: 'medium',
+    q: "Why does <code>get_single_ingredient()</code> use <code>try/except ValueError</code> twice? What does each one handle?",
+    code: `try:\n    name, qty_str, unit = input(...).split(",")\nexcept ValueError:\n    print("Error: Use format Name, Quantity, Unit...")\n\ntry:\n    qty = float(qty_str)\n    if qty <= 0: raise ValueError\nexcept ValueError:\n    print("Error: Quantity must be a number greater than 0.")`,
+    answer: `The <strong>first try/except</strong> catches a <em>ValueError</em> from unpacking — if the user doesn't provide exactly 3 comma-separated values, Python can't unpack into 3 variables, so it raises ValueError.<br><br>The <strong>second try/except</strong> catches a ValueError from <em>float(qty_str)</em> — if the user types something like "two" that can't be converted to a float. The manual <em>raise ValueError</em> inside the if also re-uses this except block to handle the case where qty is zero or negative.`,
+    tip: "Be ready to trace what happens if someone types: 'Rice, two, g' — the second try/except catches it."
+  },
+  {
+    tags: ['task1'],
+    badge: 'task1', label: 'Task 1',
+    difficulty: 'easy',
+    q: "Why are <code>CATEGORIES</code> and <code>UNITS</code> defined as sets rather than lists?",
+    code: `CATEGORIES = {"BREAKFAST", "LUNCH", "DINNER", "DESSERT", "SNACK", "BEVERAGE"}\nUNITS = {"g", "kg", "ml", "l", "cup", "tbsp", "tsp", "piece"}`,
+    answer: `<strong>Set membership testing</strong> using <em>in</em> is O(1) — instant — regardless of how many items are in the set. A list would be O(n), meaning Python checks each element one by one. For validation that runs every time a user enters a category or unit, sets are the more efficient choice. Sets also <strong>prevent duplicates</strong> by nature, which is appropriate here.`,
+    tip: "Your design document mentions this exact reasoning in Section 4 — reference it by saying 'As I noted in my data structure design section...'"
+  },
+  {
+    tags: ['task1'],
+    badge: 'task1', label: 'Task 1',
+    difficulty: 'hard',
+    q: "What exactly does <code>.strip().title()</code> do on line 11, and could <code>.title()</code> cause any unexpected behaviour?",
+    code: `name = input("Recipe name: ").strip().title()`,
+    answer: `<strong>.strip()</strong> removes leading/trailing whitespace. <strong>.title()</strong> capitalises the first letter of every word.<br><br>A potential issue: <em>.title()</em> also capitalises letters after apostrophes and hyphens. For example, <strong>"sri lankan"</strong> → <strong>"Sri Lankan"</strong> (correct), but <strong>"it's"</strong> → <strong>"It'S"</strong> (unexpected). For recipe names this is unlikely to matter, but it's worth being aware of as a limitation.`,
+    tip: "Mentioning an edge case like the apostrophe behaviour shows you understand .title() deeply, not just what it does generally."
+  },
+  {
+    tags: ['task1'],
+    badge: 'task1', label: 'Task 1',
+    difficulty: 'easy',
+    q: "Why is <code>get_time()</code> checking <code>len(time_val) != 5</code> AND <code>time_val[2] != ':'</code> before trying to split? Couldn't you just split first?",
+    answer: `If you split first without checking, a string like <strong>'1:3'</strong> (length 3) would still split successfully into two parts, and the range check might not catch the format error cleanly. By checking format <em>before</em> parsing, the error message is more specific — <strong>"Format must be exactly HH:MM"</strong> rather than a confusing number-range error. It's <strong>fail-fast validation</strong>: catch the obvious format problems first.`
+  },
+  {
+    tags: ['task1'],
+    badge: 'task1', label: 'Task 1',
+    difficulty: 'easy',
+    q: "What does <code>validate_recipe_input()</code> actually return? What Python data type is it, and what are its keys?",
+    answer: `It returns a <strong>dictionary</strong> with five keys:<br><br>
+    <strong>"name"</strong> → string (e.g. "Chicken Curry")<br>
+    <strong>"ingredients"</strong> → list of tuples, each being (name, qty, unit)<br>
+    <strong>"time"</strong> → string in HH:MM format<br>
+    <strong>"category"</strong> → string from CATEGORIES set<br>
+    <strong>"tags"</strong> → list of strings (may be empty)`,
+    tip: "Trace through the return statement at line 147–153 in your code."
+  },
+
+  // ── TASK 2 ──────────────────────────────────────────────────────────
+  {
+    tags: ['task2'],
+    badge: 'task2', label: 'Task 2',
+    difficulty: 'medium',
+    q: "Walk through <code>generate_recipe_id()</code> step by step. What happens if you have RCP001, RCP003, RCP007 in the database — what ID gets generated next?",
+    code: `for rid in recipes_db:\n    num = int(rid[3:])\n    if num > max_num:\n        max_num = num\nnew_num = max_num + 1`,
+    answer: `The function loops through all IDs, extracts the numeric part using <span class="code">rid[3:]</span> (everything after "RCP"), converts to int, and tracks the <strong>maximum</strong>.<br><br>With RCP001, RCP003, RCP007 → max_num = 7 → new_num = 8 → returns <strong>"RCP008"</strong>.<br><br>Note: it always increments the <em>highest</em> existing ID, so gaps (like missing RCP002) are never re-used. This prevents ID collisions after deletions.`,
+    tip: "Mention that this is intentional — if you deleted RCP002 and re-used it, old exported files referencing RCP002 would become ambiguous."
+  },
+  {
+    tags: ['task2', 'tricky'],
+    badge: 'task2', label: 'Task 2',
+    difficulty: 'hard',
+    q: "There's an interesting indentation in <code>add_new_recipe()</code> — the comment says 'add moreeeee....' and then the <code>ans = input()</code> line is indented inside the <code>while True</code>. Can you explain what that means for the program flow?",
+    code: `while True:\n    recipe_data = validate_recipe_input()\n    ...\n    print(f"✓ Success! Saved as Recipe ID: {new_id}")\n    print("======...")\n\n# add moreeeee....\n    ans = input("\\nAdd another recipe? (yes/no): ").strip().lower()\n    if ans != "yes":\n        ...break`,
+    answer: `The <span class="code">ans = input()</span> line is inside the <strong>while True</strong> loop body — it runs after every recipe is saved. The loop continues until the user answers anything other than "yes". The comment <em>"add moreeeee"</em> was a personal note during development.<br><br>This means: add recipe → save → ask → if yes, loop back and add again. If no, print session total and break.`,
+    tip: "Be honest that the comment is a development note you left in. Interviewers appreciate honesty over pretending it was deliberate styling."
+  },
+  {
+    tags: ['task2'],
+    badge: 'task2', label: 'Task 2',
+    difficulty: 'easy',
+    q: "Why is <code>recipes_db</code> a global dictionary? What are the trade-offs of using a global variable here?",
+    answer: `<strong>Pro:</strong> Every function can access and modify <span class="code">recipes_db</span> directly without passing it as a parameter each time. This keeps function signatures simple.<br><br><strong>Con:</strong> Global variables make functions harder to test in isolation — they depend on external state. In a larger application, passing <span class="code">recipes_db</span> as a parameter to each function (or using a class) would be better practice. For a single-file console app at this level, global state is acceptable.`
+  },
+  {
+    tags: ['task2'],
+    badge: 'task2', label: 'Task 2',
+    difficulty: 'easy',
+    q: "In <code>view_single_recipe()</code>, why do you check <code>if 'tags' in rec</code> before printing tags?",
+    code: `if "tags" in rec and len(rec["tags"]) > 0:\n    ...`,
+    answer: `When recipes are loaded from the file, it's possible (especially with old data) that a recipe dictionary was saved without a "tags" key. Checking <strong>"tags" in rec</strong> first prevents a <em>KeyError</em> crash. The second condition <strong>len(...) > 0</strong> avoids printing an empty tags line when no tags were added. This is defensive programming.`
+  },
+
+  // ── TASK 3 ──────────────────────────────────────────────────────────
+  {
+    tags: ['task3'],
+    badge: 'task3', label: 'Task 3',
+    difficulty: 'medium',
+    q: "Explain the custom file format your program uses to save recipes. Why did you choose this format over JSON?",
+    code: `RECIPE\nID:RCP001\nNAME:Sri Lankan Chicken Curry\nCATEGORY:DINNER\nTIME:00:45\nINGREDIENTS:Chicken,500.0,g|Onion,1.0,piece|\nTAGS:spicy,local,\nEND`,
+    answer: `The format uses <strong>keyword prefixes</strong> (NAME:, CATEGORY:) for simple fields and <strong>pipe | separators</strong> for ingredients within a line. Each recipe block is bounded by <strong>RECIPE</strong> and <strong>END</strong> markers.<br><br>This was chosen over JSON because: (1) it's readable without any imports, (2) the coursework required no external libraries, and (3) writing a custom parser demonstrates understanding of string manipulation. The trade-off is it's more fragile than JSON — a pipe in an ingredient name would break parsing.`,
+    tip: "You can also reference your README where you mention using | as a separator for nested lists."
+  },
+  {
+    tags: ['task3'],
+    badge: 'task3', label: 'Task 3',
+    difficulty: 'medium',
+    q: "In <code>load_recipes()</code>, what is the purpose of resetting <code>current_recipe = {}</code> every time 'RECIPE' is encountered?",
+    code: `if line == "RECIPE": current_recipe = {}\nelif line == "END": recipes_db[current_id] = current_recipe`,
+    answer: `Each time the parser sees the word <strong>RECIPE</strong>, it starts building a fresh empty dictionary. All subsequent lines populate this dictionary until <strong>END</strong> is hit, at which point the completed recipe is stored in <span class="code">recipes_db</span>.<br><br>Without resetting to <span class="code">{}</span>, each new recipe would <em>overwrite</em> keys from the previous recipe but keep any keys that weren't re-set — causing data contamination between recipes.`
+  },
+  {
+    tags: ['task3'],
+    badge: 'task3', label: 'Task 3',
+    difficulty: 'hard',
+    q: "What happens in <code>save_recipes()</code> if the program crashes midway through writing? Is there a data safety risk?",
+    code: `file = open("recipes_data.txt", "w")\nfor rid in recipes_db:\n    ...write all recipes...\nfile.close()`,
+    answer: `Opening with mode <strong>"w"</strong> immediately <em>truncates</em> (clears) the existing file before writing. If the program crashes partway through — say after writing 3 out of 5 recipes — the file would be <strong>incomplete and corrupted</strong>, losing the recipes that weren't written yet.<br><br>A safer approach would be to write to a temporary file first, then rename it over the original only after writing completes successfully. This is called an <strong>atomic write</strong>. This is a known limitation noted in the reflection section.`,
+    tip: "This is a great answer to give if asked about limitations — it shows you thought beyond the basic requirements."
+  },
+  {
+    tags: ['task3'],
+    badge: 'task3', label: 'Task 3',
+    difficulty: 'easy',
+    q: "Why does <code>load_recipes()</code> only catch <code>FileNotFoundError</code>, while <code>save_recipes()</code> catches the broad <code>Exception</code>?",
+    answer: `In <strong>load_recipes()</strong>, the only expected error is that the file doesn't exist yet (first run). Catching only <em>FileNotFoundError</em> is more precise — any other error (like a corrupted file) would still surface as an unhandled exception, which is actually useful for debugging.<br><br>In <strong>save_recipes()</strong>, catching <em>Exception</em> broadly handles any write failure — disk full, permissions denied, etc. — and shows a user-friendly error message instead of crashing. For saving, resilience matters more than specificity.`
+  },
+  {
+    tags: ['task3'],
+    badge: 'task3', label: 'Task 3',
+    difficulty: 'medium',
+    q: "In <code>parse_saved_ingredients()</code>, why do you check <code>if len(p) > 0</code> before processing each part?",
+    code: `parts = ing_string.split("|")\nfor p in parts:\n    if len(p) > 0:\n        item = p.split(",")`,
+    answer: `The ingredient string ends with a trailing pipe: <span class="code">Chicken,500.0,g|Onion,1.0,piece|</span>. When split by <strong>"|"</strong>, the last element is an <em>empty string</em> <span class="code">""</span>. Without the length check, trying to do <span class="code">item[0]</span> on an empty string would either crash or produce an empty ingredient tuple. The check safely skips that empty trailing piece.`
+  },
+
+  // ── TASK 4 ──────────────────────────────────────────────────────────
+  {
+    tags: ['task4'],
+    badge: 'task4', label: 'Task 4',
+    difficulty: 'easy',
+    q: "In <code>search_recipes()</code>, there's a <code>break</code> after printing a match. Why is it there? What would happen without it?",
+    code: `for ing in recipe["ingredients"]:\n    if term in ing[0].lower():\n        print(f"{rid} | {recipe['name']} | {recipe['category']}")\n        found_count += 1\n        break`,
+    answer: `The <strong>break</strong> exits the inner <em>for ing</em> loop after the first match. Without it, if a recipe has the search term in <em>multiple</em> ingredients (e.g. searching "coconut" in a recipe with both "Coconut Milk" and "Grated Coconut"), the same recipe would be <strong>printed twice</strong> and <span class="code">found_count</span> would be incremented multiple times.<br><br>The break ensures each recipe appears <em>at most once</em> in results, regardless of how many ingredients matched.`
+  },
+  {
+    tags: ['task4'],
+    badge: 'task4', label: 'Task 4',
+    difficulty: 'medium',
+    q: "In <code>edit_recipe()</code>, you only allow editing Name, Time, and Category — not Ingredients or Tags. Was this a deliberate decision? How would you add ingredient editing?",
+    answer: `It was a practical scope decision — editing individual ingredients is significantly more complex (you'd need to show the current list, let the user pick one, then re-validate it). For the coursework scope, the three main fields cover the core requirement.<br><br>To add ingredient editing, you'd add option 4, show the current ingredient list with indexes, let the user pick one by number, then call <span class="code">get_single_ingredient()</span> and replace that tuple in the list.`,
+    tip: "This shows initiative and forward thinking. Mention it as a 'future improvement' — which you already listed in your reflection section."
+  },
+  {
+    tags: ['task4'],
+    badge: 'task4', label: 'Task 4',
+    difficulty: 'easy',
+    q: "In <code>view_statistics()</code>, how does the category counter dictionary work? Trace through it for the sample data (RCP001=DINNER, RCP002=LUNCH, RCP005=DINNER).",
+    code: `if cat in cat_counts: cat_counts[cat] += 1\nelse: cat_counts[cat] = 1`,
+    answer: `Starting with <span class="code">cat_counts = {}</span>:<br><br>
+    RCP001 (DINNER): "DINNER" not in dict → <strong>cat_counts = {"DINNER": 1}</strong><br>
+    RCP002 (LUNCH): "LUNCH" not in dict → <strong>cat_counts = {"DINNER": 1, "LUNCH": 1}</strong><br>
+    RCP005 (DINNER): "DINNER" in dict → <strong>cat_counts = {"DINNER": 2, "LUNCH": 1}</strong><br><br>
+    Final output: DINNER: 2, LUNCH: 1`
+  },
+  {
+    tags: ['task4'],
+    badge: 'task4', label: 'Task 4',
+    difficulty: 'easy',
+    q: "In <code>delete_recipe()</code>, you use Python's <code>del</code> keyword. What does that do exactly, and what would happen if you tried to access that recipe ID afterward?",
+    code: `del recipes_db[rid]`,
+    answer: `<strong>del recipes_db[rid]</strong> completely removes that key-value pair from the dictionary. The memory is freed (Python's garbage collector handles it). After deletion, <span class="code">rid in recipes_db</span> returns <strong>False</strong>. Trying to access <span class="code">recipes_db[rid]</span> directly would raise a <em>KeyError</em> — which is why all functions check <span class="code">if rid in recipes_db</span> before accessing a recipe.`
+  },
+  {
+    tags: ['task4'],
+    badge: 'task4', label: 'Task 4',
+    difficulty: 'medium',
+    q: "What does <code>:.1f</code> do in the statistics average calculation? What would the output be if there are 5 recipes with 17 total ingredients?",
+    code: `print(f"Average Ingredients per Recipe: {total_ings / total:.1f}")`,
+    answer: `<span class="code">:.1f</span> is a <strong>format specifier</strong> inside an f-string. It formats the float to <strong>1 decimal place</strong>.<br><br>17 / 5 = 3.4 → output: <strong>"Average Ingredients per Recipe: 3.4"</strong><br><br>Without it, Python might print something like 3.4000000000000002 due to floating point representation.`
+  },
+
+  // ── DESIGN & REPORT ──────────────────────────────────────────────────
+  {
+    tags: ['design'],
+    badge: 'design', label: 'Design Doc',
+    difficulty: 'easy',
+    q: "Your test case table has a mapping error in Section 3.4 Task Coverage. Task 2 maps to tests T016–T019 and Task 3 maps to T026–T029, but you only have 25 tests. Did you notice this?",
+    answer: `Yes — the task coverage table in Section 3.4 contains a mapping inconsistency. The tests are numbered T001–T025 but the table references T026–T029 for Task 3, which don't exist. The correct mapping should have been:<br><br>
+    <strong>Task 1:</strong> T001–T010 (validation tests)<br>
+    <strong>Task 2:</strong> T011–T016 (storage/display)<br>
+    <strong>Task 3:</strong> T021–T023 (file handling)<br>
+    <strong>Task 4:</strong> T017–T025 (advanced features)<br><br>
+    This was a numbering oversight during final document assembly.`,
+    tip: "Be upfront about this. Saying 'I noticed this afterwards' is much better than being caught off-guard. Markers appreciate honesty."
+  },
+  {
+    tags: ['design'],
+    badge: 'design', label: 'Design Doc',
+    difficulty: 'easy',
+    q: "Why did you use tuples to store each ingredient (e.g. <code>('Chicken', 500.0, 'g')</code>) instead of a dictionary like <code>{'name': 'Chicken', 'qty': 500.0, 'unit': 'g'}</code>?",
+    answer: `<strong>Tuples</strong> are used because the structure is fixed — every ingredient always has exactly 3 parts in the same order: name, quantity, unit. Tuples are:<br><br>
+    • <strong>Immutable</strong> — ingredient data shouldn't change accidentally<br>
+    • <strong>More memory efficient</strong> than dictionaries<br>
+    • Accessed by position (item[0], item[1], item[2]) which is consistent throughout the code<br><br>
+    A dictionary would make sense if the structure varied or if named access like <span class="code">ing['name']</span> was significantly clearer. Both approaches are valid; tuples were chosen for simplicity and immutability.`,
+    tip: "Your design document Section 4 explains this — reference it directly."
+  },
+  {
+    tags: ['design'],
+    badge: 'design', label: 'Design Doc',
+    difficulty: 'medium',
+    q: "Your pseudocode in the design section says <code>RETURN 'RCP' + new_num zero-padded to 3 digits</code>. How did you actually implement the zero-padding in code?",
+    code: `if new_num < 10:\n    return "RCP00" + str(new_num)\nelif new_num < 100:\n    return "RCP0" + str(new_num)\nelse:\n    return "RCP" + str(new_num)`,
+    answer: `The implementation uses <strong>conditional string concatenation</strong> to manually add the correct number of zeros. Python also has a built-in method for this: <span class="code">str(new_num).zfill(3)</span> which zero-pads to 3 digits automatically — so <span class="code">"RCP" + str(8).zfill(3)</span> → <strong>"RCP008"</strong>. Both approaches produce identical results; the explicit if/elif approach was chosen because it doesn't require knowing about zfill.`
+  },
+  {
+    tags: ['design'],
+    badge: 'design', label: 'Design Doc',
+    difficulty: 'easy',
+    q: "In your AI Use Declaration you mention using AI to understand errors, not just copy fixes. Can you give a specific example of something you learned this way?",
+    answer: `One example from the declaration: when the file loading function wasn't reconstructing ingredients correctly, AI explained <strong>type conversion and string parsing</strong> — specifically why splitting a string always gives strings, and that <span class="code">float(item[1])</span> is needed to convert the quantity back from text to a number. This is why <span class="code">parse_saved_ingredients()</span> explicitly calls <span class="code">float(item[1])</span> rather than keeping it as a string.`,
+    tip: "Be specific and confident here. You declared your AI use transparently — that's the correct academic practice."
+  },
+
+  // ── TRICKY / BUGS ────────────────────────────────────────────────────
+  {
+    tags: ['tricky'],
+    badge: 'tricky', label: 'Tricky',
+    difficulty: 'hard',
+    q: "What happens if someone enters a time like <code>'0a:30'</code>? Trace through <code>get_time()</code> step by step.",
+    code: `time_val = "0a:30"\nlen("0a:30") == 5  # True\ntime_val[2] == ":"  # True\nparts = ["0a", "30"]\nhours = int("0a")  # ← ?`,
+    answer: `<span class="code">"0a:30"</span> passes the first check (length 5, colon at position 2). Then it splits into <span class="code">["0a", "30"]</span>. When <span class="code">int("0a")</span> is called, Python raises a <strong>ValueError</strong> because "0a" is not a valid integer.<br><br>This is caught by the <span class="code">except ValueError</span> block, which prints: <strong>"Error: Use numbers for hours and minutes."</strong> — and the loop prompts again. So the program handles it correctly, just via the exception handler rather than the format check.`
+  },
+  {
+    tags: ['tricky'],
+    badge: 'tricky', label: 'Tricky',
+    difficulty: 'hard',
+    q: "If a user enters an ingredient name containing a comma — like <code>Salt, Pepper mix, 2, tsp</code> — what happens in <code>get_single_ingredient()</code>?",
+    code: `name, qty_str, unit = input(...).split(",")`,
+    answer: `<span class="code">.split(",")</span> returns 4 parts: <span class="code">["Salt", " Pepper mix", " 2", " tsp"]</span>. Python tries to unpack 4 values into 3 variables → raises <strong>ValueError</strong>.<br><br>The first <span class="code">except ValueError</span> catches it and prints: <strong>"Error: Use format Name, Quantity, Unit. Don't forget commas!"</strong>. The user is re-prompted.<br><br>This is a known limitation — ingredient names containing commas cannot be entered. A fix would use <span class="code">.split(",", 2)</span> to split only on the first two commas.`,
+    tip: "This is a great edge case to mention proactively — it shows deep understanding of string splitting."
+  },
+  {
+    tags: ['tricky'],
+    badge: 'tricky', label: 'Tricky',
+    difficulty: 'hard',
+    q: "After deleting RCP003, if you call <code>generate_recipe_id()</code>, does it return RCP003 again or RCP006 (assuming RCP005 is the highest)?",
+    answer: `It returns <strong>RCP006</strong>. The function finds the <em>maximum</em> existing ID number and increments it. Since RCP005 is still in the database, max_num = 5, new_num = 6 → RCP006.<br><br>RCP003 is <strong>never re-used</strong>. This is intentional — if any exported files or external references used RCP003, re-assigning it to a different recipe would create confusion. Gaps in IDs are acceptable.`
+  },
+  {
+    tags: ['tricky'],
+    badge: 'tricky', label: 'Tricky',
+    difficulty: 'medium',
+    q: "In <code>view_single_recipe()</code>, you use <code>tag_str.strip(', ')</code> to clean up the trailing comma. Does this always work correctly?",
+    code: `for t in rec["tags"]: tag_str += t + ", "\nprint(f"Tags: {tag_str.strip(', ')}")`,
+    answer: `<span class="code">.strip(', ')</span> removes any combination of comma and space characters from both <em>ends</em> of the string. For most cases it works — e.g. <span class="code">"spicy, vegan, "</span> → <span class="code">"spicy, vegan"</span>.<br><br>However, if a tag itself starts or ends with a comma or space (e.g. a tag named "quick,"), strip would incorrectly trim characters from the first tag too. A more robust approach: <span class="code">", ".join(rec["tags"])</span> which eliminates the trailing separator problem entirely.`,
+    tip: "Mentioning ', '.join() as an improvement shows you know Pythonic string handling."
+  },
+  {
+    tags: ['tricky'],
+    badge: 'tricky', label: 'Tricky',
+    difficulty: 'medium',
+    q: "The <code>main_menu()</code> function uses <code>if __name__ == '__main__'</code> at the bottom. What does this mean and why is it good practice?",
+    code: `if __name__ == "__main__":\n    main_menu()`,
+    answer: `<span class="code">__name__</span> is a special Python variable. When you <strong>run the file directly</strong>, Python sets it to <span class="code">"__main__"</span>. When another file <strong>imports</strong> this file, <span class="code">__name__</span> is set to the module's filename instead.<br><br>This guard ensures <span class="code">main_menu()</span> only runs when the file is executed directly — not if someone imports your functions into another program. It's standard best practice for any Python script with a main entry point.`
+  }
+];
+
+let currentFilter = 'all';
+let revealedCount = 0;
+let revealedSet = new Set();
+
+function countByTag(tag) {
+  if (tag === 'all') return questions.length;
+  return questions.filter(q => q.tags.includes(tag)).join('') || questions.filter(q => q.tags.includes(tag)).length;
+}
+
+function updateCounts() {
+  const tags = ['all','task1','task2','task3','task4','design','tricky'];
+  tags.forEach(t => {
+    const count = t === 'all' ? questions.length : questions.filter(q => q.tags.includes(t)).length;
+    const el = document.getElementById('c-' + t);
+    if (el) el.textContent = count;
+  });
+}
+
+function filter(tag) {
+  currentFilter = tag;
+  document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tag-btn').forEach(b => {
+    if (b.getAttribute('onclick') === `filter('${tag}')`) b.classList.add('active');
+  });
+  renderCards();
+}
+
+function toggleAnswer(idx) {
+  const ans = document.getElementById('ans-' + idx);
+  const btn = document.getElementById('btn-' + idx);
+  if (ans.classList.contains('visible')) {
+    ans.classList.remove('visible');
+    btn.textContent = 'Show Answer';
+  } else {
+    ans.classList.add('visible');
+    btn.textContent = 'Hide Answer';
+    if (!revealedSet.has(idx)) {
+      revealedSet.add(idx);
+      revealedCount++;
+    }
+    updateStats();
+  }
+}
+
+function updateStats() {
+  const visible = currentFilter === 'all' ? questions.length : questions.filter(q => q.tags.includes(currentFilter)).length;
+  document.getElementById('stat-total').textContent = visible;
+  document.getElementById('stat-revealed').textContent = revealedSet.size;
+  const pct = questions.length > 0 ? Math.round((revealedSet.size / questions.length) * 100) : 0;
+  document.getElementById('stat-pct').textContent = pct + '%';
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = `${revealedSet.size} of ${questions.length} revealed`;
+}
+
+function renderCards() {
+  const container = document.getElementById('cards-container');
+  const filtered = currentFilter === 'all' ? questions : questions.filter(q => q.tags.includes(currentFilter));
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="no-results">No questions in this category.</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map((q, i) => {
+    const globalIdx = questions.indexOf(q);
+    const diffClass = q.difficulty === 'hard' ? 'hard' : q.difficulty === 'medium' ? 'medium' : 'easy';
+    const diffLabel = q.difficulty.charAt(0).toUpperCase() + q.difficulty.slice(1);
+    const codeBlock = q.code ? `<div class="code-snip">${q.code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : '';
+    const tipBlock = q.tip ? `<div class="tip">${q.tip}</div>` : '';
+    const isVisible = revealedSet.has(globalIdx);
+    return `
+    <div class="card">
+      <div class="card-meta">
+        <span class="badge badge-${q.badge}">${q.label}</span>
+        <span class="difficulty ${diffClass}">${diffLabel}</span>
+      </div>
+      <div class="question">${q.q}</div>
+      ${codeBlock}
+      <button class="reveal-btn" id="btn-${globalIdx}" onclick="toggleAnswer(${globalIdx})">${isVisible ? 'Hide Answer' : 'Show Answer'}</button>
+      <div class="answer ${isVisible ? 'visible' : ''}" id="ans-${globalIdx}">
+        ${q.answer}
+        ${tipBlock}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('stat-total').textContent = filtered.length;
+  updateStats();
+}
+
+updateCounts();
+renderCards();
+updateStats();
+</script>
+</body>
+</html>
