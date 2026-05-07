@@ -3,546 +3,1475 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viva Practice — Recipe Manager (4COSC006C)</title>
+<title>BYF2511 – Biology Unit I | Question Bank / ප්‍රශ්න පත්‍රිකාව</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=Noto+Serif+Sinhala:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --bg: #f5f0e8;
+    --bg2: #ede6d6;
+    --ink: #1a1410;
+    --ink2: #3d2f1f;
+    --accent: #8b3a0f;
+    --accent2: #c5622a;
+    --gold: #b8860b;
+    --gold-light: #f0d080;
+    --green: #2d6a4f;
+    --blue: #1a4a7a;
+    --red: #a01010;
+    --line: #c8b89a;
+    --card-bg: #fffdf8;
+    --shadow: 0 4px 24px rgba(80,40,0,0.10);
+    --correct-bg: #e8f5e9;
+    --wrong-bg: #fdecea;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    min-height: 100vh;
+  }
 
+  /* === HEADER === */
   header {
-    background: linear-gradient(135deg, #1e3a5f 0%, #0f1117 100%);
-    border-bottom: 1px solid #2d3748;
-    padding: 20px 30px;
+    background: var(--ink);
+    color: #f5f0e8;
+    padding: 2rem 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    border-bottom: 4px solid var(--gold);
   }
-  header h1 { font-size: 1.3rem; color: #63b3ed; font-weight: 700; }
-  header p { font-size: 0.78rem; color: #718096; margin-top: 3px; }
-
-  .layout { display: flex; height: calc(100vh - 75px); }
-
-  /* Sidebar */
-  .sidebar {
-    width: 220px; min-width: 220px;
-    background: #161b27;
-    border-right: 1px solid #2d3748;
-    overflow-y: auto;
-    padding: 14px 0;
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(184,134,11,0.04) 30px, rgba(184,134,11,0.04) 60px);
   }
-  .sidebar-section { padding: 6px 16px 4px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #4a5568; font-weight: 700; }
-  .tag-btn {
-    display: block; width: 100%; text-align: left;
-    padding: 8px 16px; font-size: 0.8rem;
-    background: none; border: none; color: #a0aec0;
-    cursor: pointer; transition: all 0.15s;
-    border-left: 3px solid transparent;
+  .header-top {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
   }
-  .tag-btn:hover { background: #1a2233; color: #e2e8f0; }
-  .tag-btn.active { background: #1a2a3a; color: #63b3ed; border-left-color: #63b3ed; }
-  .tag-btn .count { float: right; background: #2d3748; border-radius: 9px; padding: 1px 7px; font-size: 0.7rem; }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 4vw, 2.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    position: relative;
+  }
+  header h1 span { color: var(--gold-light); }
+  .header-sinhala {
+    font-family: 'Noto Serif Sinhala', serif;
+    font-size: 1rem;
+    color: #d0c8b0;
+    margin-top: 0.4rem;
+    position: relative;
+  }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: #a09080;
+    letter-spacing: 0.1em;
+    position: relative;
+  }
 
-  /* Main area */
-  .main { flex: 1; overflow-y: auto; padding: 24px 28px; }
+  /* === MAIN LAYOUT === */
+  .container { max-width: 960px; margin: 0 auto; padding: 1.5rem 1.2rem 3rem; }
 
-  .progress-bar-wrap { background: #2d3748; border-radius: 99px; height: 6px; margin-bottom: 20px; }
-  .progress-bar-fill { height: 6px; border-radius: 99px; background: linear-gradient(90deg, #3182ce, #63b3ed); transition: width 0.4s; }
-  .progress-label { font-size: 0.72rem; color: #718096; margin-bottom: 6px; }
-
-  .card {
-    background: #1a1f2e;
-    border: 1px solid #2d3748;
+  /* === SESSION TABS === */
+  .tabs-wrap {
+    background: var(--ink2);
     border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 16px;
+    padding: 0.8rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tab {
+    background: transparent;
+    color: #d0b89a;
+    border: 1px solid rgba(184,134,11,0.3);
+    border-radius: 8px;
+    padding: 0.45rem 0.9rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab:hover { background: rgba(184,134,11,0.15); color: var(--gold-light); }
+  .tab.active {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* === SESSION PANEL === */
+  .session-panel { display: none; animation: fadeIn 0.35s ease; }
+  .session-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .session-header {
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 12px 12px 0 0;
+    padding: 1.4rem 1.8rem 1.2rem;
+    border-left: 6px solid var(--gold);
+    margin-bottom: 0;
+  }
+  .session-num {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+  .session-title-en {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .session-title-si {
+    font-family: 'Noto Serif Sinhala', serif;
+    font-size: 0.95rem;
+    color: #b0a090;
+    margin-top: 0.3rem;
+  }
+
+  /* === QUESTION SECTIONS === */
+  .q-section {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-top: none;
+    padding: 1.6rem 1.8rem;
+  }
+  .q-section:last-child { border-radius: 0 0 12px 12px; margin-bottom: 2rem; }
+
+  .q-type-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 2px solid var(--bg2);
+  }
+  .q-type-badge {
+    background: var(--accent);
+    color: white;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-family: 'Source Serif 4', serif;
+  }
+  .q-type-badge.tf { background: var(--blue); }
+  .q-type-badge.fill { background: var(--green); }
+  .q-type-badge.mcq { background: var(--accent); }
+  .q-type-badge.short { background: var(--gold); color: var(--ink); }
+
+  .q-type-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink2);
+  }
+  .q-type-si {
+    font-family: 'Noto Serif Sinhala', serif;
+    font-size: 0.8rem;
+    color: #7a6a5a;
+  }
+  .q-type-points {
+    margin-left: auto;
+    font-size: 0.72rem;
+    color: #8a7a6a;
+  }
+
+  /* === QUESTION ITEMS === */
+  .question-item {
+    margin-bottom: 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
     transition: border-color 0.2s;
   }
-  .card:hover { border-color: #4a5568; }
+  .question-item:hover { border-color: var(--accent2); }
 
-  .card-meta {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  .q-body {
+    padding: 1rem 1.2rem 0.8rem;
   }
-  .badge {
-    font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;
-    text-transform: uppercase; letter-spacing: 0.5px;
+  .q-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
   }
-  .badge-task1 { background: #1a3a4a; color: #63b3ed; }
-  .badge-task2 { background: #1a3a2a; color: #68d391; }
-  .badge-task3 { background: #3a2a1a; color: #f6ad55; }
-  .badge-task4 { background: #2a1a3a; color: #b794f4; }
-  .badge-design { background: #3a1a2a; color: #fc8181; }
-  .badge-tricky { background: #3a1a1a; color: #fc4040; }
-
-  .difficulty {
-    font-size: 0.65rem; color: #4a5568; margin-left: auto;
+  .q-en {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
   }
-  .difficulty.hard { color: #fc8181; }
-  .difficulty.medium { color: #f6ad55; }
-  .difficulty.easy { color: #68d391; }
-
-  .question { font-size: 0.97rem; font-weight: 600; color: #e2e8f0; line-height: 1.5; margin-bottom: 14px; }
-
-  .code-snip {
-    background: #0d1117; border: 1px solid #2d3748; border-radius: 8px;
-    padding: 12px 14px; font-family: 'Consolas', monospace; font-size: 0.78rem;
-    color: #a8d8a8; margin: 10px 0 14px; white-space: pre-wrap; line-height: 1.6;
-  }
-
-  .reveal-btn {
-    background: #1e3a5f; color: #63b3ed; border: 1px solid #2b5282;
-    padding: 8px 18px; border-radius: 8px; font-size: 0.82rem;
-    cursor: pointer; transition: all 0.15s; font-weight: 600;
-  }
-  .reveal-btn:hover { background: #2b5282; }
-
-  .answer {
-    display: none;
-    margin-top: 14px;
-    background: #0f1a2a;
-    border-left: 3px solid #3182ce;
-    border-radius: 0 8px 8px 0;
-    padding: 14px 16px;
-    font-size: 0.87rem;
-    color: #cbd5e0;
+  .q-si {
+    font-family: 'Noto Serif Sinhala', serif;
+    font-size: 0.88rem;
     line-height: 1.7;
+    color: var(--ink2);
+    background: var(--bg2);
+    border-radius: 6px;
+    padding: 0.5rem 0.8rem;
   }
-  .answer.visible { display: block; }
-  .answer strong { color: #90cdf4; }
-  .answer .code { background: #0d1117; border-radius: 5px; padding: 2px 6px; font-family: monospace; font-size: 0.82rem; color: #a8d8a8; }
 
-  .tip {
-    margin-top: 10px;
-    background: #1a2a1a;
-    border-left: 3px solid #48bb78;
-    border-radius: 0 6px 6px 0;
-    padding: 8px 12px;
+  /* T/F */
+  .tf-buttons {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem 0.8rem;
+    background: var(--bg2);
+    border-top: 1px solid var(--line);
+  }
+  .tf-btn {
+    padding: 0.4rem 1.4rem;
+    border-radius: 6px;
+    border: 1.5px solid var(--line);
+    background: white;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-weight: 600;
+  }
+  .tf-btn.true-btn:hover { background: #e8f5e9; border-color: var(--green); color: var(--green); }
+  .tf-btn.false-btn:hover { background: #fdecea; border-color: var(--red); color: var(--red); }
+  .tf-btn.selected-true { background: #e8f5e9; border-color: var(--green); color: var(--green); }
+  .tf-btn.selected-false { background: #fdecea; border-color: var(--red); color: var(--red); }
+  .tf-btn.correct { background: #c8e6c9; border-color: var(--green); color: #1b5e20; }
+  .tf-btn.wrong { background: #ffcdd2; border-color: var(--red); color: #b71c1c; }
+
+  .q-feedback {
+    display: none;
     font-size: 0.8rem;
-    color: #9ae6b4;
+    padding: 0.45rem 1.2rem;
+    border-top: 1px solid var(--line);
   }
-  .tip::before { content: "💡 Tip: "; font-weight: 700; }
+  .q-feedback.show { display: block; }
+  .q-feedback.correct-fb { background: #e8f5e9; color: #1b5e20; }
+  .q-feedback.wrong-fb { background: #fdecea; color: #b71c1c; }
 
-  .no-results { text-align: center; padding: 60px 20px; color: #4a5568; font-size: 0.9rem; }
+  /* MCQ */
+  .mcq-options {
+    padding: 0.6rem 1.2rem 0.8rem;
+    background: var(--bg2);
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .mcq-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 6px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    background: white;
+    transition: all 0.18s;
+    font-size: 0.85rem;
+  }
+  .mcq-opt:hover { border-color: var(--accent2); background: #fff8f4; }
+  .mcq-opt.selected { border-color: var(--blue); background: #e3f2fd; }
+  .mcq-opt.correct-opt { border-color: var(--green); background: #e8f5e9; color: #1b5e20; }
+  .mcq-opt.wrong-opt { border-color: var(--red); background: #fdecea; color: #b71c1c; }
+  .opt-letter {
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 18px;
+    font-size: 0.8rem;
+    padding-top: 1px;
+  }
+  .opt-text { line-height: 1.4; }
 
-  .stats-row {
-    display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  /* Fill in blank */
+  .fill-input-wrap {
+    padding: 0.6rem 1.2rem 0.8rem;
+    background: var(--bg2);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
-  .stat-box {
-    background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px;
-    padding: 12px 18px; text-align: center; min-width: 80px;
+  .fill-input {
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    padding: 0.35rem 0.7rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.85rem;
+    background: white;
+    color: var(--ink);
+    min-width: 160px;
+    transition: border-color 0.18s;
   }
-  .stat-box .num { font-size: 1.4rem; font-weight: 700; color: #63b3ed; }
-  .stat-box .lbl { font-size: 0.65rem; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; }
+  .fill-input:focus { outline: none; border-color: var(--accent2); }
+  .fill-input.correct-input { border-color: var(--green); background: #e8f5e9; color: #1b5e20; }
+  .fill-input.wrong-input { border-color: var(--red); background: #fdecea; color: #b71c1c; }
+
+  .check-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.38rem 1rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.18s;
+    font-weight: 600;
+  }
+  .check-btn:hover { background: var(--accent2); }
+
+  /* Short answer */
+  .short-wrap {
+    padding: 0.6rem 1.2rem 0.8rem;
+    background: var(--bg2);
+    border-top: 1px solid var(--line);
+  }
+  .short-textarea {
+    width: 100%;
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.85rem;
+    background: white;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 70px;
+    transition: border-color 0.18s;
+  }
+  .short-textarea:focus { outline: none; border-color: var(--accent2); }
+  .hint-btn {
+    background: transparent;
+    color: var(--gold);
+    border: 1.5px solid var(--gold);
+    border-radius: 6px;
+    padding: 0.3rem 0.8rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    margin-top: 0.4rem;
+    transition: all 0.18s;
+  }
+  .hint-btn:hover { background: var(--gold); color: var(--ink); }
+  .hint-text {
+    display: none;
+    margin-top: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--ink2);
+    background: #fffbe6;
+    border-radius: 6px;
+    padding: 0.4rem 0.7rem;
+    border-left: 3px solid var(--gold);
+    line-height: 1.5;
+  }
+  .hint-text.show { display: block; }
+
+  /* === SCORE BAR === */
+  .score-bar {
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .score-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+  .score-val { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold-light); }
+  .reset-btn {
+    margin-left: auto;
+    background: transparent;
+    color: #a09080;
+    border: 1px solid #5a5040;
+    border-radius: 6px;
+    padding: 0.35rem 0.9rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .reset-btn:hover { color: var(--bg); border-color: var(--bg); }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .q-section, .session-header { padding: 1rem 1rem; }
+    .tabs-wrap { gap: 0.3rem; }
+    .tab { font-size: 0.7rem; padding: 0.35rem 0.6rem; }
+    .score-bar { gap: 0.8rem; }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🎓 Viva Practice — Digital Recipe Book Manager</h1>
-  <p>4COSC006C Software Development I &nbsp;|&nbsp; W2212870 &nbsp;|&nbsp; Click any question to reveal the answer</p>
+  <div class="header-top">Open University of Sri Lanka · BYF 2511 · Unit I</div>
+  <h1>Biology Question Bank<br><span>ජීව විද්‍යා ප්‍රශ්න සංග්‍රහය</span></h1>
+  <div class="header-sinhala">Sessions 1–9 · True/False · Fill Blanks · MCQ · Short Answer</div>
+  <div class="header-meta">
+    <span>9 Sessions</span>
+    <span>|</span>
+    <span>English + Sinhala</span>
+    <span>|</span>
+    <span>Past Paper Style</span>
+  </div>
 </header>
 
-<div class="layout">
-  <div class="sidebar">
-    <div class="sidebar-section">Filter by</div>
-    <button class="tag-btn active" onclick="filter('all')">All Questions <span class="count" id="c-all">0</span></button>
-    <div class="sidebar-section">Task</div>
-    <button class="tag-btn" onclick="filter('task1')">Task 1 — Validation <span class="count" id="c-task1">0</span></button>
-    <button class="tag-btn" onclick="filter('task2')">Task 2 — Storage <span class="count" id="c-task2">0</span></button>
-    <button class="tag-btn" onclick="filter('task3')">Task 3 — Files <span class="count" id="c-task3">0</span></button>
-    <button class="tag-btn" onclick="filter('task4')">Task 4 — Features <span class="count" id="c-task4">0</span></button>
-    <div class="sidebar-section">Type</div>
-    <button class="tag-btn" onclick="filter('design')">Design &amp; Report <span class="count" id="c-design">0</span></button>
-    <button class="tag-btn" onclick="filter('tricky')">⚠ Tricky / Bugs <span class="count" id="c-tricky">0</span></button>
+<div class="container">
+
+  <div class="score-bar">
+    <div>
+      <div class="score-label">Score / ලකුණු</div>
+      <div class="score-val" id="scoreDisplay">0 / 0</div>
+    </div>
+    <div style="flex:1; height:6px; background:#3a2e20; border-radius:3px; min-width:100px;">
+      <div id="scoreBar" style="height:100%; background:var(--gold); border-radius:3px; width:0%; transition:width 0.4s;"></div>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Reset All / නැවත සකසන්න</button>
   </div>
 
-  <div class="main">
-    <div class="stats-row">
-      <div class="stat-box"><div class="num" id="stat-total">0</div><div class="lbl">Questions</div></div>
-      <div class="stat-box"><div class="num" id="stat-revealed">0</div><div class="lbl">Revealed</div></div>
-      <div class="stat-box"><div class="num" id="stat-pct">0%</div><div class="lbl">Coverage</div></div>
-    </div>
-    <div class="progress-label" id="prog-label">0 of 0 answered</div>
-    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-bar" style="width:0%"></div></div>
-    <div id="cards-container"></div>
+  <!-- SESSION TABS -->
+  <div class="tabs-wrap">
+    <button class="tab active" onclick="showSession(1)">Session 1<br><small>සමාලෝචන 1</small></button>
+    <button class="tab" onclick="showSession(2)">Session 2<br><small>සමාලෝචන 2</small></button>
+    <button class="tab" onclick="showSession(3)">Session 3<br><small>සමාලෝචන 3</small></button>
+    <button class="tab" onclick="showSession(4)">Session 4<br><small>සමාලෝචන 4</small></button>
+    <button class="tab" onclick="showSession(5)">Session 5<br><small>සමාලෝචන 5</small></button>
+    <button class="tab" onclick="showSession(6)">Session 6<br><small>සමාලෝචන 6</small></button>
+    <button class="tab" onclick="showSession(7)">Session 7<br><small>සමාලෝචන 7</small></button>
+    <button class="tab" onclick="showSession(8)">Session 8<br><small>සමාලෝචන 8</small></button>
+    <button class="tab" onclick="showSession(9)">Session 9<br><small>සමාලෝචන 9</small></button>
   </div>
-</div>
+
+  <!-- ==================== SESSION 1 ==================== -->
+  <div class="session-panel active" id="panel-1">
+    <div class="session-header">
+      <div class="session-num">Session 01 · සාමාලෝචනය 01</div>
+      <div class="session-title-en">General Biology and Early History of Life</div>
+      <div class="session-title-si">සාමාන්‍ය ජීව විද්‍යාව සහ ජීවිතයේ මූලාරම්භය</div>
+    </div>
+
+    <!-- T/F -->
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge tf">True / False</span>
+        <div><div class="q-type-title">True or False</div><div class="q-type-si">ස හෝ අ දක්වන්න</div></div>
+        <span class="q-type-points">Each 1 mark</span>
+      </div>
+      <!-- TF questions -->
+      <div id="s1-tf1" class="question-item">
+        <div class="q-body">
+          <div class="q-num">Q1.1</div>
+          <div class="q-en">Biology is the science that studies only plants and animals.</div>
+          <div class="q-si">ජීව විද්‍යාව යනු ශාක සහ සත්ව පමණක් අධ්‍යයනය කරන විද්‍යාවකි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s1-tf1',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s1-tf1',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s1-tf1">Answer: <strong>False (අ)</strong> – Biology studies all living organisms and their interactions with the environment. / ජීව විද්‍යාව සියලු ජීවීන් සහ ඔවුන්ගේ පාරිසරික අන්තර්ක්‍රියා අධ්‍යයනය කරයි.</div>
+      </div>
+
+      <div id="s1-tf2" class="question-item">
+        <div class="q-body">
+          <div class="q-num">Q1.2</div>
+          <div class="q-en">The scientific method involves formulating and testing hypotheses.</div>
+          <div class="q-si">විද්‍යාත්මක ක්‍රමය, උ냰කල්ප සකස් කිරීම සහ පරීක්ෂා කිරීම ඇතුළත් වේ.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s1-tf2',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s1-tf2',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s1-tf2">Answer: <strong>True (ස)</strong> – The scientific method includes observation, posing questions, formulating hypothesis, testing and concluding. / විද්‍යාත්මක ක්‍රමයේ ඇතුළත් ය.</div>
+      </div>
+
+      <div id="s1-tf3" class="question-item">
+        <div class="q-body">
+          <div class="q-num">Q1.3</div>
+          <div class="q-en">Spontaneous generation theory states that life arises from non-living matter.</div>
+          <div class="q-si">ස්වයංජ ජනනය (Spontaneous generation) න්‍යාය ප්‍රකාශ කරන්නේ ජීවය ජීවයෙන් තොර ද්‍රව්‍යයෙන් ඇතිවේ යන්නයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s1-tf3',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s1-tf3',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s1-tf3">Answer: <strong>True (ස)</strong> – Spontaneous generation is the disproved theory that life can arise from non-living matter. / ස්වයංජ ජනනය ප්‍රතික්ෂේප කළ න්‍යායකි.</div>
+      </div>
+
+      <div id="s1-tf4" class="question-item">
+        <div class="q-body">
+          <div class="q-num">Q1.4</div>
+          <div class="q-en">The ability to reproduce is NOT considered a fundamental property of life.</div>
+          <div class="q-si">ප්‍රජනනය ජීවයේ මූලික ගුණාංගයක් නොවේ.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s1-tf4',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s1-tf4',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s1-tf4">Answer: <strong>False (අ)</strong> – Reproduction IS one of the fundamental properties of life. / ප්‍රජනනය ජීවිතයේ මූලික ගුණාංගයකි.</div>
+      </div>
+    </div>
+
+    <!-- MCQ -->
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge mcq">MCQ</span>
+        <div><div class="q-type-title">Multiple Choice</div><div class="q-type-si">බහු තේරීමේ ප්‍රශ්න</div></div>
+      </div>
+
+      <div id="s1-mcq1" class="question-item">
+        <div class="q-body">
+          <div class="q-num">Q1.5</div>
+          <div class="q-en">Which of the following best describes the scientific method?</div>
+          <div class="q-si">පහත දැක්වෙන ඒවායෙන් කුමක් විද්‍යාත්මක ක්‍රමය හොඳින් විස්තර කරයිද?</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s1-mcq1','a')"><span class="opt-letter">A</span><span class="opt-text">Doing experiments only in laboratories / රසායනාගාරවල පරීක්ෂණ කිරීම පමණි</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s1-mcq1','b')"><span class="opt-letter">B</span><span class="opt-text">Collecting all known facts on a subject / විෂය සම්බන්ධ සියලු කරුණු රැස් කිරීම</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s1-mcq1','c')" data-correct="true"><span class="opt-letter">C</span><span class="opt-text">Developing and testing hypotheses / 냰කල්ප සකස් කර පරීක්ෂා කිරීම</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s1-mcq1','d')"><span class="opt-letter">D</span><span class="opt-text">Collecting and analysis of data only / දත්ත රැස් කිරීම සහ විශ්ලේෂණය පමණි</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s1-mcq1">Correct: <strong>C</strong> – The scientific method's core is formulating and testing hypotheses through systematic investigation. / විද්‍යාත්මක ක්‍රමයේ හරය ක්‍රමානුකූල පර්යේෂණය මගින් 냰කල්ප සකස් කිරීම හා පරීක්ෂා කිරීමයි.</div>
+      </div>
+
+      <div id="s1-mcq2" class="question-item">
+        <div class="q-body">
+          <div class="q-num">Q1.6</div>
+          <div class="q-en">Which theory proposes that life originated from simple chemicals in a "primordial soup"?</div>
+          <div class="q-si">ජීවය "ප්‍රාථමික සුප්" ලෙස හඳුන්වන සරල රසායනිකවලින් ඇති විය යැයි ප්‍රකාශ කරන්නේ කුමන න්‍යායද?</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s1-mcq2','a')" data-correct="true"><span class="opt-letter">A</span><span class="opt-text">Oparin-Haldane hypothesis / ඔපාරින්-හෝල්ඩේන් 냰කල්පය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s1-mcq2','b')"><span class="opt-letter">B</span><span class="opt-text">Cell theory / සෛල න්‍යාය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s1-mcq2','c')"><span class="opt-letter">C</span><span class="opt-text">Spontaneous generation / ස්වයංජ ජනනය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s1-mcq2','d')"><span class="opt-letter">D</span><span class="opt-text">Endosymbiosis theory / එන්ඩොසිම්බියෝසිස් න්‍යාය</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s1-mcq2">Correct: <strong>A</strong> – Oparin and Haldane independently proposed that life originated from organic molecules in the early ocean. / ඔපාරින් සහ හෝල්ඩේන් ස්වාධීනව ප්‍රාරම්භ සාගරයේ කාබනික අණු වලින් ජීවය ආරම්භ වූ බව ප්‍රකාශ කළහ.</div>
+      </div>
+    </div>
+
+    <!-- Short Answer -->
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge short">Short Answer</span>
+        <div><div class="q-type-title">Short Answer Questions</div><div class="q-type-si">කෙටි පිළිතුරු ප්‍රශ්න</div></div>
+      </div>
+
+      <div class="question-item">
+        <div class="q-body">
+          <div class="q-num">Q1.7</div>
+          <div class="q-en">List four fundamental properties of life. / ජීවයේ මූලික ගුණාංග හතරක් ලියන්න.</div>
+          <div class="q-si" style="margin-top:0.4rem;">ජීවිතයේ මූලික ගුණාංග (Properties of Life) හතරක් සිංහලෙන් ද ලියන්න.</div>
+        </div>
+        <div class="short-wrap">
+          <textarea class="short-textarea" placeholder="Write your answer here... / ඔබේ පිළිතුර මෙහි ලියන්න..."></textarea>
+          <button class="hint-btn" onclick="toggleHint(this)">Show Hint / ඉඟිය පෙන්වන්න</button>
+          <div class="hint-text">Key points: Growth & development (වර්ධනය), Reproduction (ප්‍රජනනය), Response to stimuli (උද්දීපනයට ප්‍රතිචාර), Metabolism (පරිවෘත්තිය), Homeostasis (සිරීරාත්මක සමතුලිතතාව), Cellular organization (සෛලීය සංවිධානය).</div>
+        </div>
+      </div>
+
+      <div class="question-item">
+        <div class="q-body">
+          <div class="q-num">Q1.8</div>
+          <div class="q-en">Outline the main steps of the scientific method for investigating the effect of nitrogen on plant growth.</div>
+          <div class="q-si">ශාක වර්ධනය මත නයිට්‍රජන් හි බලපෑම පරීක්ෂා කිරීමේදී විද්‍යාත්මක ක්‍රමයේ ප්‍රධාන පියවර ගෙනහැර දක්වන්න.</div>
+        </div>
+        <div class="short-wrap">
+          <textarea class="short-textarea" placeholder="Write your answer here..."></textarea>
+          <button class="hint-btn" onclick="toggleHint(this)">Show Hint / ඉඟිය</button>
+          <div class="hint-text">Steps: 1) Identify problem 2) Formulate hypothesis (e.g., "Nitrogen increases growth") 3) Design experiment with control group 4) Collect and analyze data 5) Draw conclusion.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SESSION 2 ==================== -->
+  <div class="session-panel" id="panel-2">
+    <div class="session-header">
+      <div class="session-num">Session 02 · සාමාලෝචනය 02</div>
+      <div class="session-title-en">Microscopy</div>
+      <div class="session-title-si">අণුදර්ශනය (Microscopy)</div>
+    </div>
+
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge tf">True / False</span>
+        <div><div class="q-type-title">True or False / ස හෝ අ</div></div>
+      </div>
+
+      <div id="s2-tf1" class="question-item">
+        <div class="q-body"><div class="q-num">Q2.1</div>
+          <div class="q-en">Light microscopes use electrons to illuminate specimens.</div>
+          <div class="q-si">ආලෝක අෘෂාළය ආදර්ශ (specimens) ආලෝකමත් කිරීමට ඉලෙක්ට්‍රෝන භාවිතා කරයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s2-tf1',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s2-tf1',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s2-tf1">Answer: <strong>False (අ)</strong> – Light microscopes use visible light, not electrons. Electron microscopes use electrons. / ආලෝක අෘෂාළය ආලෝකය භාවිතා කරයි; ඉලෙක්ට්‍රෝන නොවේ.</div>
+      </div>
+
+      <div id="s2-tf2" class="question-item">
+        <div class="q-body"><div class="q-num">Q2.2</div>
+          <div class="q-en">Transmission Electron Microscopy (TEM) provides a surface image of specimens.</div>
+          <div class="q-si">සන්නාමාන ඉලෙක්ට්‍රෝන අෘෂාළය (TEM) ආදර්ශයේ මතුපිට රූපය ලබා දෙයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s2-tf2',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s2-tf2',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s2-tf2">Answer: <strong>False (අ)</strong> – TEM gives internal structure images. SEM (Scanning Electron Microscopy) gives surface images. / TEM අභ්‍යන්තර ව්‍යූහය පෙන්වයි; SEM මතුපිට රූපය ලබා දෙයි.</div>
+      </div>
+
+      <div id="s2-tf3" class="question-item">
+        <div class="q-body"><div class="q-num">Q2.3</div>
+          <div class="q-en">Resolving power is the ability of a microscope to distinguish two closely spaced points as separate.</div>
+          <div class="q-si">නිරාකරණ ශක්තිය (resolving power) යනු ආසන්නව ඇති ලක්ෂ්‍ය දෙකක් වෙනම ලෙස හඳුනා ගැනීමේ හැකියාවයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s2-tf3',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s2-tf3',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s2-tf3">Answer: <strong>True (ස)</strong> – Resolving power determines the clarity of the image. Higher resolving power = finer detail. / නිරාකරණ ශක්තිය රූපයේ පැහැදිලිකම තීරණය කරයි.</div>
+      </div>
+    </div>
+
+    <!-- Fill Blank -->
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge fill">Fill Blank</span>
+        <div><div class="q-type-title">Fill in the Blanks</div><div class="q-type-si">හිස්තැන් පුරවන්න</div></div>
+      </div>
+
+      <div class="question-item" id="s2-fill1">
+        <div class="q-body"><div class="q-num">Q2.4</div>
+          <div class="q-en">The compound microscope uses ________ lenses to magnify the specimen.</div>
+          <div class="q-si">සංයෝජිත අෘෂාළය ආදර්ශය විශාල කිරීම සඳහා ________ කාච (lenses) භාවිතා කරයි.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="Type answer..." data-answer="multiple" data-alt="several">
+          <button class="check-btn" onclick="checkFill(this,'s2-fill1',['multiple','several','many'])">Check / පරීක්ෂා කරන්න</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s2-fill1">Answer: <strong>multiple</strong> – The compound microscope contains several lenses. / සංයෝජිත අෘෂාළය කාච කිහිපයක් ඇතුළත් ය.</div>
+      </div>
+
+      <div class="question-item" id="s2-fill2">
+        <div class="q-body"><div class="q-num">Q2.5</div>
+          <div class="q-en">Electron microscopes use ________ lenses instead of optical lenses.</div>
+          <div class="q-si">ඉලෙක්ට්‍රෝන අෘෂාළ ආලෝකීය කාච වෙනුවට ________ කාච භාවිතා කරයි.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="Type answer..." data-answer="electromagnetic">
+          <button class="check-btn" onclick="checkFill(this,'s2-fill2',['electromagnetic'])">Check / පරීක්ෂා</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s2-fill2">Answer: <strong>electromagnetic</strong> / විද්‍යුත් චුම්භක කාච.</div>
+      </div>
+    </div>
+
+    <!-- MCQ -->
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge mcq">MCQ</span>
+        <div><div class="q-type-title">Multiple Choice / බහු තේරීම</div></div>
+      </div>
+      <div id="s2-mcq1" class="question-item">
+        <div class="q-body"><div class="q-num">Q2.6</div>
+          <div class="q-en">Which type of microscope produces images of living specimens against a dark background?</div>
+          <div class="q-si">ජීවී ආදර්ශ (living specimens) අඳුරු배경ෙහි රූප ලබා දෙන්නේ කුමන ආකාරයේ අෘෂාළයක්ද?</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s2-mcq1','a')"><span class="opt-letter">A</span><span class="opt-text">Compound microscope / සංයෝජිත අෘෂාළය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s2-mcq1','b')" data-correct="true"><span class="opt-letter">B</span><span class="opt-text">Dark field microscope / අඳුරු ක්ෂේත්‍ර අෘෂාළය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s2-mcq1','c')"><span class="opt-letter">C</span><span class="opt-text">Phase contrast microscope / ෆේස් කොන්ට්‍රාස්ට් අෘෂාළය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s2-mcq1','d')"><span class="opt-letter">D</span><span class="opt-text">SEM / ස්කෑනිං ඉලෙක්ට්‍රෝන අෘෂාළය</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s2-mcq1">Correct: <strong>B</strong> – Dark field microscope uses a special condenser allowing only scattered light, creating bright images on dark background. / අඳුරු ක්ෂේත්‍ර අෘෂාළය විශේෂ කොන්ඩෙන්සරයක් භාවිතා කරයි.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SESSION 3 ==================== -->
+  <div class="session-panel" id="panel-3">
+    <div class="session-header">
+      <div class="session-num">Session 03 · සාමාලෝචනය 03</div>
+      <div class="session-title-en">Is Cell the Basic Unit of Life?</div>
+      <div class="session-title-si">සෛලය ජීවිතයේ මූලික ඒකකයද?</div>
+    </div>
+
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge tf">True / False · ස / අ</span>
+      </div>
+      <div id="s3-tf1" class="question-item">
+        <div class="q-body"><div class="q-num">Q3.1</div>
+          <div class="q-en">Viruses have a cellular organization.</div>
+          <div class="q-si">වෛරස් වල සෛලීය සංවිධානයක් ඇත.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s3-tf1',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s3-tf1',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s3-tf1">Answer: <strong>False (අ)</strong> – Viruses and prions do NOT have cellular organization. They are acellular. / වෛරස් සහ ප්‍රියොන් සෛලීය සංවිධානයක් නොමැත.</div>
+      </div>
+      <div id="s3-tf2" class="question-item">
+        <div class="q-body"><div class="q-num">Q3.2</div>
+          <div class="q-en">Prokaryotic cells have a membrane-bound nucleus.</div>
+          <div class="q-si">ප්‍රොකෙරියොටික සෛල සඳහා පටල-සහිත න්‍යෂ්ටියක් (nucleus) ඇත.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s3-tf2',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s3-tf2',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s3-tf2">Answer: <strong>False (අ)</strong> – Prokaryotic cells lack a membrane-bound nucleus. Only eukaryotic cells have a true nucleus. / ප්‍රොකෙරියොට් සෛලවල පටල-ආවරණ සහිත න්‍යෂ්ටි නොමැත.</div>
+      </div>
+      <div id="s3-tf3" class="question-item">
+        <div class="q-body"><div class="q-num">Q3.3</div>
+          <div class="q-en">Anton van Leeuwenhoek discovered the cell by observing cork tissue.</div>
+          <div class="q-si">ඇන්ටන් වෑන් ලීවෙන්හොෙක් කෝර්ක් පටකය නිරීක්ෂණය කිරීමෙන් සෛලය සොයා ගත්තේය.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s3-tf3',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s3-tf3',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s3-tf3">Answer: <strong>False (අ)</strong> – Robert Hooke discovered cells in cork. Leeuwenhoek studied bacteria, protozoa, and blood cells. / රොබට් හූකේ කෝර්ක්හි සෛල සොයා ගත්තේය. ලීවෙන්හොෙක් බැක්ටීරියා ආදිය අධ්‍යයනය කළේය.</div>
+      </div>
+    </div>
+
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge mcq">MCQ · බහු තේරීම</span>
+      </div>
+      <div id="s3-mcq1" class="question-item">
+        <div class="q-body"><div class="q-num">Q3.4</div>
+          <div class="q-en">Which of the following is characteristic of EUKARYOTIC cells only?</div>
+          <div class="q-si">පහත දැක්වෙන ඒවායෙන් යූකෙරියොටික සෛලවලට පමණක් ආවේණික ලක්ෂණය කුමක්ද?</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s3-mcq1','a')"><span class="opt-letter">A</span><span class="opt-text">Presence of DNA / DNA පැවැත්ම</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s3-mcq1','b')"><span class="opt-letter">B</span><span class="opt-text">Ribosomes / රයිබොසෝම</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s3-mcq1','c')" data-correct="true"><span class="opt-letter">C</span><span class="opt-text">Membrane-bound organelles / පටල ආවරණ සහිත ඉන්ද්‍රිය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s3-mcq1','d')"><span class="opt-letter">D</span><span class="opt-text">Cell membrane / සෛල පටලය</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s3-mcq1">Correct: <strong>C</strong> – Eukaryotic cells have membrane-bound organelles (nucleus, mitochondria, etc.), which prokaryotes lack. / යූකෙරියොටික සෛල සතු ව ඉන්ද්‍රිය ප්‍රොකෙරියොට්හි නොමැත.</div>
+      </div>
+      <div id="s3-mcq2" class="question-item">
+        <div class="q-body"><div class="q-num">Q3.5</div>
+          <div class="q-en">Cell theory states that all new cells arise from:</div>
+          <div class="q-si">සෛල න්‍යාය ප්‍රකාශ කරන්නේ සියලු නව සෛල …….. ලෙස ඇතිවේ කියාය:</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s3-mcq2','a')"><span class="opt-letter">A</span><span class="opt-text">Non-living chemicals / ජීවයෙන් තොර රසායනිකවලින්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s3-mcq2','b')" data-correct="true"><span class="opt-letter">B</span><span class="opt-text">Pre-existing cells / පෙර-පැවති සෛලවලින්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s3-mcq2','c')"><span class="opt-letter">C</span><span class="opt-text">Viruses / වෛරසවලින්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s3-mcq2','d')"><span class="opt-letter">D</span><span class="opt-text">Water and sunlight / ජලය සහ හිරු ආලෝකයෙන්</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s3-mcq2">Correct: <strong>B</strong> – Cell theory: all cells arise from pre-existing cells (Omnis cellula e cellula). / සෛල න්‍යාය: සියලු සෛල පෙර-සෛලවලින් ඇතිවේ.</div>
+      </div>
+    </div>
+
+    <div class="q-section">
+      <div class="q-type-header">
+        <span class="q-type-badge short">Short Answer / කෙටි පිළිතුර</span>
+      </div>
+      <div class="question-item">
+        <div class="q-body"><div class="q-num">Q3.6</div>
+          <div class="q-en">Describe why viruses are regarded as a separate entity, neither fully living nor non-living.</div>
+          <div class="q-si">වෛරස් ජීවීන් ද නොවන, ජීවයෙන් තොර ද නොවන, වෙනම ඕනෑවට වඩා ස්ව-ක්‍රියාකාරීත්වයක් ඇති ගොඩකිව ද නොහැකි ඒවා ලෙස සලකන්නේ ඇයිදැයි විස්තර කරන්න.</div>
+        </div>
+        <div class="short-wrap">
+          <textarea class="short-textarea" placeholder="Your answer..."></textarea>
+          <button class="hint-btn" onclick="toggleHint(this)">Hint</button>
+          <div class="hint-text">Viruses: contain genetic material (DNA/RNA), reproduce inside host cells, but outside host they are inert crystals, have no metabolism, no cells. / වෛරස්: DNA/RNA ඇත, සත්කාරක සෛල ඇතුළේ ප්‍රජනනය කරයි; නමුත් සත්කාරකයෙන් පිටත ක්‍රියාශීලී නොවන, සෛල රහිත, පරිවෘත්තිය නොමැත.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SESSION 4 ==================== -->
+  <div class="session-panel" id="panel-4">
+    <div class="session-header">
+      <div class="session-num">Session 04 · සාමාලෝචනය 04</div>
+      <div class="session-title-en">Cell Membranes</div>
+      <div class="session-title-si">සෛල පටල (Cell Membranes)</div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge tf">True / False · ස / අ</span></div>
+      <div id="s4-tf1" class="question-item">
+        <div class="q-body"><div class="q-num">Q4.1</div>
+          <div class="q-en">The plasma membrane is freely permeable to all substances.</div>
+          <div class="q-si">ප්ලාස්මා පටලය සියලු ද්‍රව්‍යයන්ට නිදහසේ ප්‍රවේශ වීමට ඉඩ දෙයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s4-tf1',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s4-tf1',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s4-tf1">Answer: <strong>False (අ)</strong> – The plasma membrane is selectively permeable; it allows only certain substances to pass. / ප්ලාස්මා පටලය තෝරාගත් ලෙස ගම්‍ය (selectively permeable) ය.</div>
+      </div>
+      <div id="s4-tf2" class="question-item">
+        <div class="q-body"><div class="q-num">Q4.2</div>
+          <div class="q-en">The Fluid Mosaic Model was proposed to explain the structure of biological membranes.</div>
+          <div class="q-si">ජෛව-රසායනික පටලවල ව්‍යූහය පැහැදිලි කිරීම සඳහා ෆ්ලූඩ් මොසේයික් ආකෘතිය (Fluid Mosaic Model) ප්‍රකාශ කරන ලදී.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s4-tf2',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s4-tf2',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s4-tf2">Answer: <strong>True (ස)</strong> – The Fluid Mosaic Model (Singer & Nicolson, 1972) best describes membrane structure. / ෆ්ලූඩ් මොසේයික් ආකෘතිය (1972) පටල ව්‍යූහය හොඳ ලෙස විස්තර කරයි.</div>
+      </div>
+      <div id="s4-tf3" class="question-item">
+        <div class="q-body"><div class="q-num">Q4.3</div>
+          <div class="q-en">Phospholipid molecules in the membrane are arranged in a single layer.</div>
+          <div class="q-si">පටලයේ ෆොස්ෆොලිපිඩ් අණු තනි ස්ථරයකට සකසා ඇත.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s4-tf3',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s4-tf3',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s4-tf3">Answer: <strong>False (අ)</strong> – Phospholipids form a BILAYER (double layer). / ෆොස්ෆොලිපිඩ් ද්විස්ථර (bilayer) ව සකසා ඇත.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge fill">Fill Blank · හිස්තැන්</span></div>
+      <div class="question-item" id="s4-fill1">
+        <div class="q-body"><div class="q-num">Q4.4</div>
+          <div class="q-en">Membrane proteins located on the surface of the membrane are called ________ proteins.</div>
+          <div class="q-si">පටලයේ මතුපිටට ඇති ප්‍රෝටීන ________ ප්‍රෝටීන ලෙස හැඳින්වේ.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="Type answer...">
+          <button class="check-btn" onclick="checkFill(this,'s4-fill1',['peripheral','extrinsic'])">Check</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s4-fill1">Answer: <strong>peripheral / extrinsic</strong> – Surface proteins are peripheral/extrinsic proteins. / මතුපිට ප්‍රෝටීන, පෙරිෆෙරල් / එක්ස්ට්‍රින්සික් ප්‍රෝටීන ලෙස හැඳින්වේ.</div>
+      </div>
+      <div class="question-item" id="s4-fill2">
+        <div class="q-body"><div class="q-num">Q4.5</div>
+          <div class="q-en">The thickness of a cell membrane is approximately ________ Angstroms.</div>
+          <div class="q-si">සෛල පටලයක ඝනකම ආසන්න වශයෙන් ________ ඇන්ස්ට්‍රොම් (Å) වේ.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="Type answer...">
+          <button class="check-btn" onclick="checkFill(this,'s4-fill2',['75','75a'])">Check</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s4-fill2">Answer: <strong>75 Å</strong> – Cell membranes are about 75 Angstroms thick. / සෛල පටල ආසන්නව 75Å ඝනකමක් ඇත.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge short">Short Answer</span></div>
+      <div class="question-item">
+        <div class="q-body"><div class="q-num">Q4.6</div>
+          <div class="q-en">List four functions of the plasma membrane. / ප්ලාස්මා පටලයේ කාර්යයන් හතරක් ලයිස්තු කරන්න.</div>
+          <div class="q-si">ප්ලාස්මා පටලයේ ප්‍රධාන කාර්යයන් හතරක් ලියන්න.</div>
+        </div>
+        <div class="short-wrap">
+          <textarea class="short-textarea" placeholder="Your answer..."></textarea>
+          <button class="hint-btn" onclick="toggleHint(this)">Hint</button>
+          <div class="hint-text">Functions: 1) Selective permeability / ද්‍රව්‍ය ප්‍රවාහය පාලනය 2) Cell signaling / සෛල සංඥා 3) Structural support / ව්‍යූහ සහාය 4) Transport / ප්‍රවාහනය 5) Attachment / සෛල ඇලවීම.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SESSION 5 ==================== -->
+  <div class="session-panel" id="panel-5">
+    <div class="session-header">
+      <div class="session-num">Session 05 · සාමාලෝචනය 05</div>
+      <div class="session-title-en">Beyond the Cell Membrane – Cell Wall</div>
+      <div class="session-title-si">සෛල පටලෙන් ඔබ්බට – සෛල බිත්තිය</div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge tf">True / False · ස / අ</span></div>
+      <div id="s5-tf1" class="question-item">
+        <div class="q-body"><div class="q-num">Q5.1</div>
+          <div class="q-en">Animal cells have a rigid cell wall outside the plasma membrane.</div>
+          <div class="q-si">සත්ව සෛලවල ප්ලාස්මා පටලෙන් පිටත දෘඩ සෛල බිත්තියක් ඇත.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s5-tf1',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s5-tf1',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s5-tf1">Answer: <strong>False (අ)</strong> – Only plant, bacterial and fungal cells have cell walls. Animal cells do NOT. / ශාක, බැක්ටීරියා, දිලීර සෛල සතු ය. සත්ව සෛල සතු නොවේ.</div>
+      </div>
+      <div id="s5-tf2" class="question-item">
+        <div class="q-body"><div class="q-num">Q5.2</div>
+          <div class="q-en">The primary component of the plant cell wall is cellulose.</div>
+          <div class="q-si">ශාක සෛල බිත්තියේ ප්‍රාථමික සංඝටකය සෙලියුලෝස් (cellulose) ය.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s5-tf2',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s5-tf2',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s5-tf2">Answer: <strong>True (ස)</strong> – The plant cell wall is primarily made of cellulose microfibrils. / ශාක සෛල බිත්තිය ප්‍රධාන වශයෙන් සෙලියුලෝස් අදිය සමන්විත ය.</div>
+      </div>
+      <div id="s5-tf3" class="question-item">
+        <div class="q-body"><div class="q-num">Q5.3</div>
+          <div class="q-en">Plasmodesmata are cytoplasmic connections between adjacent plant cells.</div>
+          <div class="q-si">ප්ලාස්මොඩෙස්මාටා (Plasmodesmata) යනු යාබද ශාක සෛල අතර ඇති සයිටොප්ලාස්මික් සම්බන්ධතා ය.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s5-tf3',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s5-tf3',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s5-tf3">Answer: <strong>True (ස)</strong> – Plasmodesmata are channels through cell walls connecting adjacent plant cells. / ප්ලාස්මොඩෙස්මාටා සෛල බිත්තිය හරහා ශාක සෛල සම්බන්ධ කරයි.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge mcq">MCQ · බහු තේරීම</span></div>
+      <div id="s5-mcq1" class="question-item">
+        <div class="q-body"><div class="q-num">Q5.4</div>
+          <div class="q-en">In which stage of mitosis is the cell wall formed in plant cells?</div>
+          <div class="q-si">ශාක සෛලවල සෛල බිත්තිය mitosis හි කුමන අවස්ථාවේදී සෑදේද?</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s5-mcq1','a')"><span class="opt-letter">A</span><span class="opt-text">Prophase / ප්‍රොෆේස්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s5-mcq1','b')"><span class="opt-letter">B</span><span class="opt-text">Metaphase / මෙටාෆේස්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s5-mcq1','c')"><span class="opt-letter">C</span><span class="opt-text">Anaphase / ඇනාෆේස්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s5-mcq1','d')" data-correct="true"><span class="opt-letter">D</span><span class="opt-text">Telophase / ටෙලොෆේස්</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s5-mcq1">Correct: <strong>D</strong> – During telophase (telophasic stage), the phragmoplast forms and leads to cell wall formation. / ටෙලොෆේස් (telophasic) අවස්ථාවේ ෆ්‍රේග්මොප්ලාස්ට් (phragmoplast) ඇතිව සෛල බිත්තිය සෑදේ.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge short">Short Answer</span></div>
+      <div class="question-item">
+        <div class="q-body"><div class="q-num">Q5.5</div>
+          <div class="q-en">What is a bordered pit? How does it differ from a simple pit? / ෂීමාන් ලෙකිය (bordered pit) යනු කුමක්ද? සරල ලෙකියෙන් (simple pit) වෙනස් වන්නේ කෙසේද?</div>
+          <div class="q-si">ෂීමාන් ලෙකිය (bordered pit) සහ සරල ලෙකිය (simple pit) විස්තර කරන්න.</div>
+        </div>
+        <div class="short-wrap">
+          <textarea class="short-textarea" placeholder="Your answer..."></textarea>
+          <button class="hint-btn" onclick="toggleHint(this)">Hint</button>
+          <div class="hint-text">Bordered pit: pit aperture is narrowed by overarching secondary wall creating a "border" – found in xylem tracheids/vessels. Simple pit: a gap in the cell wall without overarching secondary wall. / ෂීමාන් ලෙකි: ද්විතීයික බිත්තිය දෙපසින් ඉදිරිය ඇරෙන, ද්‍රව ගැලීම සදහා / සරල ලෙකි: ද්විතීයික බිත්තිය නොමැතිව.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SESSION 6 ==================== -->
+  <div class="session-panel" id="panel-6">
+    <div class="session-header">
+      <div class="session-num">Session 06 · සාමාලෝචනය 06</div>
+      <div class="session-title-en">Cellular Organelles</div>
+      <div class="session-title-si">සෛල ඉන්ද්‍රිය (Cellular Organelles)</div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge tf">True / False · ස / අ</span></div>
+      <div id="s6-tf1" class="question-item">
+        <div class="q-body"><div class="q-num">Q6.1</div>
+          <div class="q-en">The Golgi apparatus is responsible for modifying, sorting, and packaging proteins.</div>
+          <div class="q-si">ගොල්ජි උපකරණය ප්‍රෝටීන සකස් කිරීම, වර්ගීකරණය සහ ඇසුරුම් කිරීම සඳහා ක්‍රියා කරයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s6-tf1',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s6-tf1',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s6-tf1">Answer: <strong>True (ස)</strong> – Golgi apparatus receives proteins from ER, modifies and packages them. / ගොල්ජි ER සිට ප්‍රෝටීන ලබාගෙන සකස් කර ඇසුරුම් කරයි.</div>
+      </div>
+      <div id="s6-tf2" class="question-item">
+        <div class="q-body"><div class="q-num">Q6.2</div>
+          <div class="q-en">Mitochondria are found only in plant cells.</div>
+          <div class="q-si">මයිටොකොන්ඩ්‍රියා ශාක සෛලවල පමණක් දක්නා ලැබේ.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s6-tf2',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s6-tf2',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s6-tf2">Answer: <strong>False (අ)</strong> – Mitochondria are found in ALL eukaryotic cells (both plant and animal). / මයිටොකොන්ඩ්‍රියා සියලු යූකෙරියොටික සෛලවල (ශාක + සත්ව) දක්නා ලැබේ.</div>
+      </div>
+      <div id="s6-tf3" class="question-item">
+        <div class="q-body"><div class="q-num">Q6.3</div>
+          <div class="q-en">Ribosomes are responsible for protein synthesis.</div>
+          <div class="q-si">රයිබොසෝම ප්‍රෝටීන සංශ්ලේෂණය සඳහා ක්‍රියාකාරී ය.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s6-tf3',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s6-tf3',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s6-tf3">Answer: <strong>True (ස)</strong> – Ribosomes translate mRNA into proteins. / රයිබොසෝම mRNA ප්‍රෝටීනයට පරිවර්තනය කරයි.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge mcq">MCQ · බහු තේරීම</span></div>
+      <div id="s6-mcq1" class="question-item">
+        <div class="q-body"><div class="q-num">Q6.4</div>
+          <div class="q-en">Which organelle is known as the "powerhouse of the cell"?</div>
+          <div class="q-si">සෛලයේ "ශක්ති ගබඩාව" ලෙස හඳුන්වනු ලබන ඉන්ද්‍රිය කුමක්ද?</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s6-mcq1','a')"><span class="opt-letter">A</span><span class="opt-text">Nucleus / න්‍යෂ්ටිය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s6-mcq1','b')" data-correct="true"><span class="opt-letter">B</span><span class="opt-text">Mitochondria / මයිටොකොන්ඩ්‍රියා</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s6-mcq1','c')"><span class="opt-letter">C</span><span class="opt-text">Ribosome / රයිබොසෝමය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s6-mcq1','d')"><span class="opt-letter">D</span><span class="opt-text">Chloroplast / හරිතලාව</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s6-mcq1">Correct: <strong>B</strong> – Mitochondria produce ATP through cellular respiration. / මයිටොකොන්ඩ්‍රියා ශ්වසනය මගින් ATP නිෂ්පාදනය කරයි.</div>
+      </div>
+      <div id="s6-mcq2" class="question-item">
+        <div class="q-body"><div class="q-num">Q6.5</div>
+          <div class="q-en">The nuclear pore complex primarily controls:</div>
+          <div class="q-si">න්‍යෂ්ටික සිදුරු සංකීර්ණය (nuclear pore complex) ප්‍රධාන වශයෙන් පාලනය කරන්නේ:</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s6-mcq2','a')" data-correct="true"><span class="opt-letter">A</span><span class="opt-text">Passage of molecules in and out of nucleus / න්‍යෂ්ටිය ඇතුළට-බැවිරිය අණු ගමන</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s6-mcq2','b')"><span class="opt-letter">B</span><span class="opt-text">DNA replication / DNA ප්‍රතිලේඛනය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s6-mcq2','c')"><span class="opt-letter">C</span><span class="opt-text">Protein synthesis / ප්‍රෝටීන සංශ්ලේෂණය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s6-mcq2','d')"><span class="opt-letter">D</span><span class="opt-text">Cell division / සෛල බෙදීම</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s6-mcq2">Correct: <strong>A</strong> – Nuclear pore proteins act as channels controlling molecular traffic. / න්‍යෂ්ටික සිදුරු ප්‍රෝටීන නාලිකා ලෙස ක්‍රියා කරයි.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SESSION 7 ==================== -->
+  <div class="session-panel" id="panel-7">
+    <div class="session-header">
+      <div class="session-num">Session 07 · සාමාලෝචනය 07</div>
+      <div class="session-title-en">Carbohydrates, Lipids, Proteins & Nucleic Acids</div>
+      <div class="session-title-si">කාබෝහයිඩ්‍රේට, ලිපිඩ, ප්‍රෝටීන සහ න්‍යෂ්ටික අම්ල</div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge tf">True / False · ස / අ</span></div>
+      <div id="s7-tf1" class="question-item">
+        <div class="q-body"><div class="q-num">Q7.1</div>
+          <div class="q-en">Glucose is a monosaccharide carbohydrate.</div>
+          <div class="q-si">ග්ලූකෝස් (Glucose) යනු ඒකක-සීනි (monosaccharide) කාබෝහයිඩ්‍රේටයකි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s7-tf1',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s7-tf1',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s7-tf1">Answer: <strong>True (ස)</strong> – Glucose (C₆H₁₂O₆) is a hexose monosaccharide. / ග්ලූකෝස් (C₆H₁₂O₆) හෙක්සෝස් ඒකක-සීනි ය.</div>
+      </div>
+      <div id="s7-tf2" class="question-item">
+        <div class="q-body"><div class="q-num">Q7.2</div>
+          <div class="q-en">DNA and RNA are both examples of nucleic acids.</div>
+          <div class="q-si">DNA සහ RNA යන දෙකම න්‍යෂ්ටික අම්ල (nucleic acids) ලෙස දක්වා ඇත.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s7-tf2',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s7-tf2',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s7-tf2">Answer: <strong>True (ස)</strong> – Both DNA (Deoxyribonucleic acid) and RNA (Ribonucleic acid) are nucleic acids. / DNA සහ RNA දෙකම න්‍යෂ්ටික අම්ල ය.</div>
+      </div>
+      <div id="s7-tf3" class="question-item">
+        <div class="q-body"><div class="q-num">Q7.3</div>
+          <div class="q-en">Lipids are soluble in water.</div>
+          <div class="q-si">ලිපිඩ ජලයේ ද්‍රාවණ (soluble) ය.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s7-tf3',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s7-tf3',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s7-tf3">Answer: <strong>False (අ)</strong> – Lipids are hydrophobic (water-insoluble). They dissolve in organic solvents. / ලිපිඩ ජල-ද්වේෂ (hydrophobic) ය; ජලයේ ද්‍රාවණ නොවේ.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge fill">Fill Blank · හිස්තැන්</span></div>
+      <div class="question-item" id="s7-fill1">
+        <div class="q-body"><div class="q-num">Q7.4</div>
+          <div class="q-en">Amino acids are linked together by ________ bonds to form proteins.</div>
+          <div class="q-si">ඇමිනෝ අම්ල ________ බන්ධන (bonds) මගින් සම්බන්ධ වී ප්‍රෝටීන සෑදේ.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="Type answer...">
+          <button class="check-btn" onclick="checkFill(this,'s7-fill1',['peptide'])">Check</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s7-fill1">Answer: <strong>peptide</strong> – Amino acids are joined by peptide bonds. / ඇමිනෝ අම්ල පෙප්ටයිඩ් බන්ධන මගින් සම්බන්ධ ය.</div>
+      </div>
+      <div class="question-item" id="s7-fill2">
+        <div class="q-body"><div class="q-num">Q7.5</div>
+          <div class="q-en">Sucrose and lactose are examples of ________ carbohydrates.</div>
+          <div class="q-si">සුක්‍රෝස් සහ ලැක්ටෝස් ________ කාබෝහයිඩ්‍රේට ලෙස හැඳින්වේ.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="Type answer...">
+          <button class="check-btn" onclick="checkFill(this,'s7-fill2',['disaccharide','disaccharides'])">Check</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s7-fill2">Answer: <strong>disaccharide</strong> – Sucrose = glucose + fructose; Lactose = glucose + galactose. / සුක්‍රෝස් = ග්ලූකෝස් + ෆ්‍රෑක්ටෝස්; ලැක්ටෝස් = ග්ලූකෝස් + ගැලක්ටෝස්.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge mcq">MCQ · බහු තේරීම</span></div>
+      <div id="s7-mcq1" class="question-item">
+        <div class="q-body"><div class="q-num">Q7.6</div>
+          <div class="q-en">Which biomolecule serves as the primary energy storage in animals?</div>
+          <div class="q-si">සත්ව ශරීරයේ ප්‍රාථමික ශක්ති ගබඩා ජෛව-අණුව කුමක්ද?</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s7-mcq1','a')"><span class="opt-letter">A</span><span class="opt-text">Cellulose / සෙලියුලෝස්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s7-mcq1','b')"><span class="opt-letter">B</span><span class="opt-text">Starch / පිෂ්ඨය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s7-mcq1','c')" data-correct="true"><span class="opt-letter">C</span><span class="opt-text">Glycogen / ග්ලයිකොජෙන්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s7-mcq1','d')"><span class="opt-letter">D</span><span class="opt-text">Glucose / ග්ලූකෝස්</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s7-mcq1">Correct: <strong>C</strong> – Glycogen is stored in liver and muscle cells as energy reserve in animals. (Starch is for plants.) / ග්ලයිකොජෙන් සත්ව ශරීරයේ (අක්මාව, මාංශ) ශක්ති ගබඩාව ය. ශාකවල පිෂ්ඨය ය.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SESSION 8 ==================== -->
+  <div class="session-panel" id="panel-8">
+    <div class="session-header">
+      <div class="session-num">Session 08 · සාමාලෝචනය 08</div>
+      <div class="session-title-en">Transport Across Membrane</div>
+      <div class="session-title-si">පටල හරහා ප්‍රවාහනය</div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge tf">True / False · ස / අ</span></div>
+      <div id="s8-tf1" class="question-item">
+        <div class="q-body"><div class="q-num">Q8.1</div>
+          <div class="q-en">Passive transport requires energy (ATP) to move substances across the membrane.</div>
+          <div class="q-si">ෂිත ප්‍රවාහනය (passive transport) සඳහා ශක්තිය (ATP) අවශ්‍ය ය.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s8-tf1',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s8-tf1',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s8-tf1">Answer: <strong>False (අ)</strong> – Passive transport requires NO energy; it moves with the concentration gradient. / ෂිත ප්‍රවාහනය ශක්තිය නොගෙන, සාන්ද්‍රණ ශ්‍රේණිය දිගේ ගමන් කරයි.</div>
+      </div>
+      <div id="s8-tf2" class="question-item">
+        <div class="q-body"><div class="q-num">Q8.2</div>
+          <div class="q-en">Osmosis is the diffusion of water through a selectively permeable membrane.</div>
+          <div class="q-si">ඔස්මෝසිස් (Osmosis) යනු තෝරාගත් ගම්‍ය-පටලයක් (selectively permeable membrane) හරහා ජල ව්‍යාප්තියයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s8-tf2',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s8-tf2',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s8-tf2">Answer: <strong>True (ස)</strong> – Osmosis: water diffuses from high water concentration to low water concentration through a semi-permeable membrane. / ඔස්මෝසිස් ය.</div>
+      </div>
+      <div id="s8-tf3" class="question-item">
+        <div class="q-body"><div class="q-num">Q8.3</div>
+          <div class="q-en">Endocytosis is the process of exporting materials out of the cell.</div>
+          <div class="q-si">එන්ඩොසයිටෝසිස් (Endocytosis) යනු සෛලයෙන් ද්‍රව්‍ය පිටතට යැවීමේ ක්‍රියාවලියයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s8-tf3',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s8-tf3',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s8-tf3">Answer: <strong>False (අ)</strong> – Endocytosis brings materials INTO the cell. Exocytosis exports materials OUT. / එන්ඩොසයිටෝසිස් ද්‍රව්‍ය ඇතුළට ය; එක්සොසයිටෝසිස් ද්‍රව්‍ය පිටතට ය.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge fill">Fill Blank · හිස්තැන්</span></div>
+      <div class="question-item" id="s8-fill1">
+        <div class="q-body"><div class="q-num">Q8.4</div>
+          <div class="q-en">Active transport moves molecules ________ the concentration gradient and requires energy.</div>
+          <div class="q-si">ක්‍රියාශීලී ප්‍රවාහනය (active transport) සාන්ද්‍රණ ශ්‍රේණිය ________ ද්‍රව්‍ය ගෙන යයි.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="against / with">
+          <button class="check-btn" onclick="checkFill(this,'s8-fill1',['against'])">Check</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s8-fill1">Answer: <strong>against</strong> – Active transport moves molecules against (up) the concentration gradient. / ක්‍රියාශීලී ප්‍රවාහනය, සාන්ද්‍රණ ශ්‍රේණිය ඉහළට (against) ය.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge mcq">MCQ · බහු තේරීම</span></div>
+      <div id="s8-mcq1" class="question-item">
+        <div class="q-body"><div class="q-num">Q8.5</div>
+          <div class="q-en">Facilitated diffusion differs from simple diffusion in that it:</div>
+          <div class="q-si">ස‍ෞකර්ය ව්‍යාප්තිය (facilitated diffusion) සරල ව්‍යාප්තියෙන් (simple diffusion) වෙනස් වන්නේ:</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s8-mcq1','a')"><span class="opt-letter">A</span><span class="opt-text">Requires ATP / ATP අවශ්‍ය ය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s8-mcq1','b')" data-correct="true"><span class="opt-letter">B</span><span class="opt-text">Uses specific carrier/channel proteins / විශේෂ වාහක ප්‍රෝටීන/නාල ප්‍රෝටීන භාවිතා කරයි</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s8-mcq1','c')"><span class="opt-letter">C</span><span class="opt-text">Moves against concentration gradient / සාන්ද්‍රණ ශ්‍රේණිය ඉහළට ය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s8-mcq1','d')"><span class="opt-letter">D</span><span class="opt-text">Only occurs in plant cells / ශාක සෛලවල පමණ</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s8-mcq1">Correct: <strong>B</strong> – Facilitated diffusion uses specific protein channels/carriers (no energy needed). / ස‍ෞකර්ය ව්‍යාප්තිය ශක්ති රහිතව, නිශ්චිත ප්‍රෝටීන නාල/වාහක භාවිතා කරයි.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SESSION 9 ==================== -->
+  <div class="session-panel" id="panel-9">
+    <div class="session-header">
+      <div class="session-num">Session 09 · සාමාලෝචනය 09</div>
+      <div class="session-title-en">Water as a Transportation Medium</div>
+      <div class="session-title-si">ප්‍රවාහන මාධ්‍යයක් ලෙස ජලය</div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge tf">True / False · ස / අ</span></div>
+      <div id="s9-tf1" class="question-item">
+        <div class="q-body"><div class="q-num">Q9.1</div>
+          <div class="q-en">Water moves from a region of HIGH water potential to a region of LOW water potential.</div>
+          <div class="q-si">ජලය, ඉහළ ජල විභවතාවය (water potential) ඇති ප්‍රදේශයේ සිට අඩු ජල විභවතාවය ඇති ප්‍රදේශය දෙසට ගමන් කරයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s9-tf1',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s9-tf1',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s9-tf1">Answer: <strong>True (ස)</strong> – Water always moves down the water potential gradient. / ජලය සෑමවිටම ජල-විභවතා ශ්‍රේණිය දිගේ (high → low) ගමන් කරයි.</div>
+      </div>
+      <div id="s9-tf2" class="question-item">
+        <div class="q-body"><div class="q-num">Q9.2</div>
+          <div class="q-en">Plasmolysis occurs when a cell gains excess water and swells.</div>
+          <div class="q-si">ප්ලාස්මොලිසිස් (Plasmolysis) සිදු වන්නේ සෛලය අතිරික්ත ජලය ලබා ගෙන ඉදිමෙන විටයි.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s9-tf2',false)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s9-tf2',false)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s9-tf2">Answer: <strong>False (අ)</strong> – Plasmolysis occurs when a cell LOSES water (shrinkage of cell contents). Turgidity = cell gaining water. / ප්ලාස්මොලිසිස් = ජලය නැතිකිරීම. ටගිඩිටි = ජලය ලැබීම.</div>
+      </div>
+      <div id="s9-tf3" class="question-item">
+        <div class="q-body"><div class="q-num">Q9.3</div>
+          <div class="q-en">The Casparian strip is impermeable to water and dissolved ions.</div>
+          <div class="q-si">කැස්පේරියා තීරය (Casparian strip) ජලය සහ දිය කළ අයන (ions) ට ගම්‍ය නොවේ.</div>
+        </div>
+        <div class="tf-buttons">
+          <button class="tf-btn true-btn" onclick="checkTF(this,'s9-tf3',true)">True (ස)</button>
+          <button class="tf-btn false-btn" onclick="checkTF(this,'s9-tf3',true)">False (අ)</button>
+        </div>
+        <div class="q-feedback" id="fb-s9-tf3">Answer: <strong>True (ස)</strong> – The Casparian strip (suberin-impregnated) blocks apoplastic water flow in the endodermis. / කැස්පේරියා තීරය (සුබෙරින් සහිත) ඇපොප්ලාස්ටික් ජල ගමන අවහිර කරයි.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge fill">Fill Blank · හිස්තැන්</span></div>
+      <div class="question-item" id="s9-fill1">
+        <div class="q-body"><div class="q-num">Q9.4</div>
+          <div class="q-en">On average, ________ % of plant cell protoplasm is composed of water.</div>
+          <div class="q-si">සාමාන්‍ය ශාක සෛල ප්‍රෝටොප්ලාස්මයෙන් ________ % ජලය ය.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="e.g. 90">
+          <button class="check-btn" onclick="checkFill(this,'s9-fill1',['90','90-95','90 to 95'])">Check</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s9-fill1">Answer: <strong>90–95%</strong> – 90-95% of the protoplasm in plant cells is water. / ශාක සෛල ප්‍රෝටොප්ලාස්මයෙන් 90-95% ජලය ය.</div>
+      </div>
+      <div class="question-item" id="s9-fill2">
+        <div class="q-body"><div class="q-num">Q9.5</div>
+          <div class="q-en">A cell in a turgid state develops a ________ potential.</div>
+          <div class="q-si">ටගිඩ් (turgid) තත්ත්වයේ ඇති සෛලයක් ________ විභවතාවයක් (potential) ඇති කරයි.</div>
+        </div>
+        <div class="fill-input-wrap">
+          <input class="fill-input" type="text" placeholder="Type answer...">
+          <button class="check-btn" onclick="checkFill(this,'s9-fill2',['pressure','turgor','turgor pressure'])">Check</button>
+          <span class="fill-result" style="font-size:0.82rem;"></span>
+        </div>
+        <div class="q-feedback" id="fb-s9-fill2">Answer: <strong>pressure</strong> (turgor pressure) – A turgid cell builds up pressure potential as water enters. / ජලය ඇතුළුවීමෙන් සෛලය පීඩන-විභවතා ඇති කරයි.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge mcq">MCQ · බහු තේරීම</span></div>
+      <div id="s9-mcq1" class="question-item">
+        <div class="q-body"><div class="q-num">Q9.6</div>
+          <div class="q-en">Water is absorbed from soil by root cells primarily through:</div>
+          <div class="q-si">ශාක මූල සෛල විසින් මිදුළු ජලය ප්‍රධාන වශයෙන් ශෝෂනය කරන්නේ:</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s9-mcq1','a')"><span class="opt-letter">A</span><span class="opt-text">Active transport only / ක්‍රියාශීලී ප්‍රවාහනය පමණි</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s9-mcq1','b')" data-correct="true"><span class="opt-letter">B</span><span class="opt-text">Osmosis along a water potential gradient / ජල-විභව ශ්‍රේණිය දිගේ ඔස්මෝසිස් මගින්</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s9-mcq1','c')"><span class="opt-letter">C</span><span class="opt-text">Facilitated diffusion / ස‍ෞකර්ය ව්‍යාප්තිය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s9-mcq1','d')"><span class="opt-letter">D</span><span class="opt-text">Endocytosis / එන්ඩොසයිටෝසිස්</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s9-mcq1">Correct: <strong>B</strong> – Water enters root hair cells by osmosis along the water potential gradient from soil. / ජලය, ජල-විභව ශ්‍රේණිය (soil → root) දිගේ ඔස්මෝසිස් මගින් ශෝෂනය ය.</div>
+      </div>
+      <div id="s9-mcq2" class="question-item">
+        <div class="q-body"><div class="q-num">Q9.7</div>
+          <div class="q-en">Which property of water allows it to move upward against gravity in tall plants?</div>
+          <div class="q-si">දිගු ශාකවල ජලය ගුරුත්වාකර්ෂණයට විරෙව ඉහළට ගමන් කරන්නේ ජලයේ කුමන ගුණාංගය නිසාද?</div>
+        </div>
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="checkMCQ(this,'s9-mcq2','a')"><span class="opt-letter">A</span><span class="opt-text">High specific heat / ඉහළ විශේෂ තාපය</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s9-mcq2','b')"><span class="opt-letter">B</span><span class="opt-text">Low viscosity / අඩු ශ්‍යානතාව</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s9-mcq2','c')" data-correct="true"><span class="opt-letter">C</span><span class="opt-text">Cohesion and adhesion / ස‍ෞ-ඇලීම සහ ඇලීම (cohesion & adhesion)</span></div>
+          <div class="mcq-opt" onclick="checkMCQ(this,'s9-mcq2','d')"><span class="opt-letter">D</span><span class="opt-text">High boiling point / ඉහළ තිතිකාංශ</span></div>
+        </div>
+        <div class="q-feedback" id="fb-s9-mcq2">Correct: <strong>C</strong> – Cohesion (water-water) and adhesion (water-vessel wall) enable capillary action and upward water movement. / ස‍ෞ-ඇලීම + ඇලීම ජලය ඉහළට ගෙනයායි.</div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-type-header"><span class="q-type-badge short">Short Answer / කෙටි පිළිතුර</span></div>
+      <div class="question-item">
+        <div class="q-body"><div class="q-num">Q9.8</div>
+          <div class="q-en">Explain the concept of water potential and how it determines the direction of water movement in plant cells.</div>
+          <div class="q-si">ශාක සෛලවල ජල ව්‍යාප්ති දිශාව තීරණය කිරීමට ජල-විභවතා (water potential) සංකල්පය පැහැදිලි කරන්න.</div>
+        </div>
+        <div class="short-wrap">
+          <textarea class="short-textarea" placeholder="Your answer..."></textarea>
+          <button class="hint-btn" onclick="toggleHint(this)">Hint</button>
+          <div class="hint-text">Water potential (Ψ) = Solute potential (Ψs) + Pressure potential (Ψp). Water moves from high Ψ to low Ψ. Pure water = 0. Dissolved solutes lower Ψ (make it more negative). Turgid cells have high pressure potential. / ජල-විභවතා (Ψ) = ද්‍රාවිත-විභවතා (Ψs) + පීඩන-විභවතා (Ψp). ජලය ඉහළ Ψ සිට අඩු Ψ දෙසට ය.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
 
 <script>
-const questions = [
-  // ── TASK 1 ──────────────────────────────────────────────────────────
-  {
-    tags: ['task1'],
-    badge: 'task1', label: 'Task 1',
-    difficulty: 'easy',
-    q: "Why did you use a <code>while True</code> loop in <code>get_recipe_name()</code> instead of just checking the input once?",
-    answer: `A <strong>while True loop</strong> keeps re-prompting the user until they provide valid input. Without it, the program would either crash or silently accept bad data if the first input was wrong. The loop only exits when a <strong>return</strong> statement is reached — meaning the input passed all checks.`,
-    tip: "Mention that this pattern is used in all your validation functions — it's a deliberate design choice, not just habit."
-  },
-  {
-    tags: ['task1'],
-    badge: 'task1', label: 'Task 1',
-    difficulty: 'medium',
-    q: "In <code>get_recipe_name()</code>, you wrote <code>if has_letter == True</code>. Is there a more Pythonic way to write that? Would it change anything?",
-    code: `if has_letter == True:\n    return name`,
-    answer: `Yes — the Pythonic way is simply <span class="code">if has_letter:</span>. In Python, comparing a boolean to <strong>True</strong> using <strong>==</strong> is redundant because the variable is already a boolean. Both versions produce identical results — it's purely a style improvement.`,
-    tip: "Acknowledge you're aware of this. Saying 'I know it can be simplified to if has_letter:' shows self-awareness."
-  },
-  {
-    tags: ['task1'],
-    badge: 'task1', label: 'Task 1',
-    difficulty: 'medium',
-    q: "In <code>get_single_ingredient()</code>, why does the duplicate check allow the user to continue anyway if they type 'yes'?",
-    answer: `The requirement says ingredients <em>should</em> be unique, but sometimes a cook might legitimately want to add the same ingredient twice in different forms (e.g. fresh garlic and garlic powder, both named 'Garlic'). The soft warning gives the user control while still flagging the issue. It's a <strong>user-friendly validation</strong> rather than a hard block.`,
-    tip: "Point to line 58 in your code where the condition checks: if is_dup AND the user doesn't confirm 'yes', then continue."
-  },
-  {
-    tags: ['task1'],
-    badge: 'task1', label: 'Task 1',
-    difficulty: 'medium',
-    q: "Why does <code>get_single_ingredient()</code> use <code>try/except ValueError</code> twice? What does each one handle?",
-    code: `try:\n    name, qty_str, unit = input(...).split(",")\nexcept ValueError:\n    print("Error: Use format Name, Quantity, Unit...")\n\ntry:\n    qty = float(qty_str)\n    if qty <= 0: raise ValueError\nexcept ValueError:\n    print("Error: Quantity must be a number greater than 0.")`,
-    answer: `The <strong>first try/except</strong> catches a <em>ValueError</em> from unpacking — if the user doesn't provide exactly 3 comma-separated values, Python can't unpack into 3 variables, so it raises ValueError.<br><br>The <strong>second try/except</strong> catches a ValueError from <em>float(qty_str)</em> — if the user types something like "two" that can't be converted to a float. The manual <em>raise ValueError</em> inside the if also re-uses this except block to handle the case where qty is zero or negative.`,
-    tip: "Be ready to trace what happens if someone types: 'Rice, two, g' — the second try/except catches it."
-  },
-  {
-    tags: ['task1'],
-    badge: 'task1', label: 'Task 1',
-    difficulty: 'easy',
-    q: "Why are <code>CATEGORIES</code> and <code>UNITS</code> defined as sets rather than lists?",
-    code: `CATEGORIES = {"BREAKFAST", "LUNCH", "DINNER", "DESSERT", "SNACK", "BEVERAGE"}\nUNITS = {"g", "kg", "ml", "l", "cup", "tbsp", "tsp", "piece"}`,
-    answer: `<strong>Set membership testing</strong> using <em>in</em> is O(1) — instant — regardless of how many items are in the set. A list would be O(n), meaning Python checks each element one by one. For validation that runs every time a user enters a category or unit, sets are the more efficient choice. Sets also <strong>prevent duplicates</strong> by nature, which is appropriate here.`,
-    tip: "Your design document mentions this exact reasoning in Section 4 — reference it by saying 'As I noted in my data structure design section...'"
-  },
-  {
-    tags: ['task1'],
-    badge: 'task1', label: 'Task 1',
-    difficulty: 'hard',
-    q: "What exactly does <code>.strip().title()</code> do on line 11, and could <code>.title()</code> cause any unexpected behaviour?",
-    code: `name = input("Recipe name: ").strip().title()`,
-    answer: `<strong>.strip()</strong> removes leading/trailing whitespace. <strong>.title()</strong> capitalises the first letter of every word.<br><br>A potential issue: <em>.title()</em> also capitalises letters after apostrophes and hyphens. For example, <strong>"sri lankan"</strong> → <strong>"Sri Lankan"</strong> (correct), but <strong>"it's"</strong> → <strong>"It'S"</strong> (unexpected). For recipe names this is unlikely to matter, but it's worth being aware of as a limitation.`,
-    tip: "Mentioning an edge case like the apostrophe behaviour shows you understand .title() deeply, not just what it does generally."
-  },
-  {
-    tags: ['task1'],
-    badge: 'task1', label: 'Task 1',
-    difficulty: 'easy',
-    q: "Why is <code>get_time()</code> checking <code>len(time_val) != 5</code> AND <code>time_val[2] != ':'</code> before trying to split? Couldn't you just split first?",
-    answer: `If you split first without checking, a string like <strong>'1:3'</strong> (length 3) would still split successfully into two parts, and the range check might not catch the format error cleanly. By checking format <em>before</em> parsing, the error message is more specific — <strong>"Format must be exactly HH:MM"</strong> rather than a confusing number-range error. It's <strong>fail-fast validation</strong>: catch the obvious format problems first.`
-  },
-  {
-    tags: ['task1'],
-    badge: 'task1', label: 'Task 1',
-    difficulty: 'easy',
-    q: "What does <code>validate_recipe_input()</code> actually return? What Python data type is it, and what are its keys?",
-    answer: `It returns a <strong>dictionary</strong> with five keys:<br><br>
-    <strong>"name"</strong> → string (e.g. "Chicken Curry")<br>
-    <strong>"ingredients"</strong> → list of tuples, each being (name, qty, unit)<br>
-    <strong>"time"</strong> → string in HH:MM format<br>
-    <strong>"category"</strong> → string from CATEGORIES set<br>
-    <strong>"tags"</strong> → list of strings (may be empty)`,
-    tip: "Trace through the return statement at line 147–153 in your code."
-  },
+// Track scores
+let correct = 0, attempted = 0;
+const answered = {};
 
-  // ── TASK 2 ──────────────────────────────────────────────────────────
-  {
-    tags: ['task2'],
-    badge: 'task2', label: 'Task 2',
-    difficulty: 'medium',
-    q: "Walk through <code>generate_recipe_id()</code> step by step. What happens if you have RCP001, RCP003, RCP007 in the database — what ID gets generated next?",
-    code: `for rid in recipes_db:\n    num = int(rid[3:])\n    if num > max_num:\n        max_num = num\nnew_num = max_num + 1`,
-    answer: `The function loops through all IDs, extracts the numeric part using <span class="code">rid[3:]</span> (everything after "RCP"), converts to int, and tracks the <strong>maximum</strong>.<br><br>With RCP001, RCP003, RCP007 → max_num = 7 → new_num = 8 → returns <strong>"RCP008"</strong>.<br><br>Note: it always increments the <em>highest</em> existing ID, so gaps (like missing RCP002) are never re-used. This prevents ID collisions after deletions.`,
-    tip: "Mention that this is intentional — if you deleted RCP002 and re-used it, old exported files referencing RCP002 would become ambiguous."
-  },
-  {
-    tags: ['task2', 'tricky'],
-    badge: 'task2', label: 'Task 2',
-    difficulty: 'hard',
-    q: "There's an interesting indentation in <code>add_new_recipe()</code> — the comment says 'add moreeeee....' and then the <code>ans = input()</code> line is indented inside the <code>while True</code>. Can you explain what that means for the program flow?",
-    code: `while True:\n    recipe_data = validate_recipe_input()\n    ...\n    print(f"✓ Success! Saved as Recipe ID: {new_id}")\n    print("======...")\n\n# add moreeeee....\n    ans = input("\\nAdd another recipe? (yes/no): ").strip().lower()\n    if ans != "yes":\n        ...break`,
-    answer: `The <span class="code">ans = input()</span> line is inside the <strong>while True</strong> loop body — it runs after every recipe is saved. The loop continues until the user answers anything other than "yes". The comment <em>"add moreeeee"</em> was a personal note during development.<br><br>This means: add recipe → save → ask → if yes, loop back and add again. If no, print session total and break.`,
-    tip: "Be honest that the comment is a development note you left in. Interviewers appreciate honesty over pretending it was deliberate styling."
-  },
-  {
-    tags: ['task2'],
-    badge: 'task2', label: 'Task 2',
-    difficulty: 'easy',
-    q: "Why is <code>recipes_db</code> a global dictionary? What are the trade-offs of using a global variable here?",
-    answer: `<strong>Pro:</strong> Every function can access and modify <span class="code">recipes_db</span> directly without passing it as a parameter each time. This keeps function signatures simple.<br><br><strong>Con:</strong> Global variables make functions harder to test in isolation — they depend on external state. In a larger application, passing <span class="code">recipes_db</span> as a parameter to each function (or using a class) would be better practice. For a single-file console app at this level, global state is acceptable.`
-  },
-  {
-    tags: ['task2'],
-    badge: 'task2', label: 'Task 2',
-    difficulty: 'easy',
-    q: "In <code>view_single_recipe()</code>, why do you check <code>if 'tags' in rec</code> before printing tags?",
-    code: `if "tags" in rec and len(rec["tags"]) > 0:\n    ...`,
-    answer: `When recipes are loaded from the file, it's possible (especially with old data) that a recipe dictionary was saved without a "tags" key. Checking <strong>"tags" in rec</strong> first prevents a <em>KeyError</em> crash. The second condition <strong>len(...) > 0</strong> avoids printing an empty tags line when no tags were added. This is defensive programming.`
-  },
-
-  // ── TASK 3 ──────────────────────────────────────────────────────────
-  {
-    tags: ['task3'],
-    badge: 'task3', label: 'Task 3',
-    difficulty: 'medium',
-    q: "Explain the custom file format your program uses to save recipes. Why did you choose this format over JSON?",
-    code: `RECIPE\nID:RCP001\nNAME:Sri Lankan Chicken Curry\nCATEGORY:DINNER\nTIME:00:45\nINGREDIENTS:Chicken,500.0,g|Onion,1.0,piece|\nTAGS:spicy,local,\nEND`,
-    answer: `The format uses <strong>keyword prefixes</strong> (NAME:, CATEGORY:) for simple fields and <strong>pipe | separators</strong> for ingredients within a line. Each recipe block is bounded by <strong>RECIPE</strong> and <strong>END</strong> markers.<br><br>This was chosen over JSON because: (1) it's readable without any imports, (2) the coursework required no external libraries, and (3) writing a custom parser demonstrates understanding of string manipulation. The trade-off is it's more fragile than JSON — a pipe in an ingredient name would break parsing.`,
-    tip: "You can also reference your README where you mention using | as a separator for nested lists."
-  },
-  {
-    tags: ['task3'],
-    badge: 'task3', label: 'Task 3',
-    difficulty: 'medium',
-    q: "In <code>load_recipes()</code>, what is the purpose of resetting <code>current_recipe = {}</code> every time 'RECIPE' is encountered?",
-    code: `if line == "RECIPE": current_recipe = {}\nelif line == "END": recipes_db[current_id] = current_recipe`,
-    answer: `Each time the parser sees the word <strong>RECIPE</strong>, it starts building a fresh empty dictionary. All subsequent lines populate this dictionary until <strong>END</strong> is hit, at which point the completed recipe is stored in <span class="code">recipes_db</span>.<br><br>Without resetting to <span class="code">{}</span>, each new recipe would <em>overwrite</em> keys from the previous recipe but keep any keys that weren't re-set — causing data contamination between recipes.`
-  },
-  {
-    tags: ['task3'],
-    badge: 'task3', label: 'Task 3',
-    difficulty: 'hard',
-    q: "What happens in <code>save_recipes()</code> if the program crashes midway through writing? Is there a data safety risk?",
-    code: `file = open("recipes_data.txt", "w")\nfor rid in recipes_db:\n    ...write all recipes...\nfile.close()`,
-    answer: `Opening with mode <strong>"w"</strong> immediately <em>truncates</em> (clears) the existing file before writing. If the program crashes partway through — say after writing 3 out of 5 recipes — the file would be <strong>incomplete and corrupted</strong>, losing the recipes that weren't written yet.<br><br>A safer approach would be to write to a temporary file first, then rename it over the original only after writing completes successfully. This is called an <strong>atomic write</strong>. This is a known limitation noted in the reflection section.`,
-    tip: "This is a great answer to give if asked about limitations — it shows you thought beyond the basic requirements."
-  },
-  {
-    tags: ['task3'],
-    badge: 'task3', label: 'Task 3',
-    difficulty: 'easy',
-    q: "Why does <code>load_recipes()</code> only catch <code>FileNotFoundError</code>, while <code>save_recipes()</code> catches the broad <code>Exception</code>?",
-    answer: `In <strong>load_recipes()</strong>, the only expected error is that the file doesn't exist yet (first run). Catching only <em>FileNotFoundError</em> is more precise — any other error (like a corrupted file) would still surface as an unhandled exception, which is actually useful for debugging.<br><br>In <strong>save_recipes()</strong>, catching <em>Exception</em> broadly handles any write failure — disk full, permissions denied, etc. — and shows a user-friendly error message instead of crashing. For saving, resilience matters more than specificity.`
-  },
-  {
-    tags: ['task3'],
-    badge: 'task3', label: 'Task 3',
-    difficulty: 'medium',
-    q: "In <code>parse_saved_ingredients()</code>, why do you check <code>if len(p) > 0</code> before processing each part?",
-    code: `parts = ing_string.split("|")\nfor p in parts:\n    if len(p) > 0:\n        item = p.split(",")`,
-    answer: `The ingredient string ends with a trailing pipe: <span class="code">Chicken,500.0,g|Onion,1.0,piece|</span>. When split by <strong>"|"</strong>, the last element is an <em>empty string</em> <span class="code">""</span>. Without the length check, trying to do <span class="code">item[0]</span> on an empty string would either crash or produce an empty ingredient tuple. The check safely skips that empty trailing piece.`
-  },
-
-  // ── TASK 4 ──────────────────────────────────────────────────────────
-  {
-    tags: ['task4'],
-    badge: 'task4', label: 'Task 4',
-    difficulty: 'easy',
-    q: "In <code>search_recipes()</code>, there's a <code>break</code> after printing a match. Why is it there? What would happen without it?",
-    code: `for ing in recipe["ingredients"]:\n    if term in ing[0].lower():\n        print(f"{rid} | {recipe['name']} | {recipe['category']}")\n        found_count += 1\n        break`,
-    answer: `The <strong>break</strong> exits the inner <em>for ing</em> loop after the first match. Without it, if a recipe has the search term in <em>multiple</em> ingredients (e.g. searching "coconut" in a recipe with both "Coconut Milk" and "Grated Coconut"), the same recipe would be <strong>printed twice</strong> and <span class="code">found_count</span> would be incremented multiple times.<br><br>The break ensures each recipe appears <em>at most once</em> in results, regardless of how many ingredients matched.`
-  },
-  {
-    tags: ['task4'],
-    badge: 'task4', label: 'Task 4',
-    difficulty: 'medium',
-    q: "In <code>edit_recipe()</code>, you only allow editing Name, Time, and Category — not Ingredients or Tags. Was this a deliberate decision? How would you add ingredient editing?",
-    answer: `It was a practical scope decision — editing individual ingredients is significantly more complex (you'd need to show the current list, let the user pick one, then re-validate it). For the coursework scope, the three main fields cover the core requirement.<br><br>To add ingredient editing, you'd add option 4, show the current ingredient list with indexes, let the user pick one by number, then call <span class="code">get_single_ingredient()</span> and replace that tuple in the list.`,
-    tip: "This shows initiative and forward thinking. Mention it as a 'future improvement' — which you already listed in your reflection section."
-  },
-  {
-    tags: ['task4'],
-    badge: 'task4', label: 'Task 4',
-    difficulty: 'easy',
-    q: "In <code>view_statistics()</code>, how does the category counter dictionary work? Trace through it for the sample data (RCP001=DINNER, RCP002=LUNCH, RCP005=DINNER).",
-    code: `if cat in cat_counts: cat_counts[cat] += 1\nelse: cat_counts[cat] = 1`,
-    answer: `Starting with <span class="code">cat_counts = {}</span>:<br><br>
-    RCP001 (DINNER): "DINNER" not in dict → <strong>cat_counts = {"DINNER": 1}</strong><br>
-    RCP002 (LUNCH): "LUNCH" not in dict → <strong>cat_counts = {"DINNER": 1, "LUNCH": 1}</strong><br>
-    RCP005 (DINNER): "DINNER" in dict → <strong>cat_counts = {"DINNER": 2, "LUNCH": 1}</strong><br><br>
-    Final output: DINNER: 2, LUNCH: 1`
-  },
-  {
-    tags: ['task4'],
-    badge: 'task4', label: 'Task 4',
-    difficulty: 'easy',
-    q: "In <code>delete_recipe()</code>, you use Python's <code>del</code> keyword. What does that do exactly, and what would happen if you tried to access that recipe ID afterward?",
-    code: `del recipes_db[rid]`,
-    answer: `<strong>del recipes_db[rid]</strong> completely removes that key-value pair from the dictionary. The memory is freed (Python's garbage collector handles it). After deletion, <span class="code">rid in recipes_db</span> returns <strong>False</strong>. Trying to access <span class="code">recipes_db[rid]</span> directly would raise a <em>KeyError</em> — which is why all functions check <span class="code">if rid in recipes_db</span> before accessing a recipe.`
-  },
-  {
-    tags: ['task4'],
-    badge: 'task4', label: 'Task 4',
-    difficulty: 'medium',
-    q: "What does <code>:.1f</code> do in the statistics average calculation? What would the output be if there are 5 recipes with 17 total ingredients?",
-    code: `print(f"Average Ingredients per Recipe: {total_ings / total:.1f}")`,
-    answer: `<span class="code">:.1f</span> is a <strong>format specifier</strong> inside an f-string. It formats the float to <strong>1 decimal place</strong>.<br><br>17 / 5 = 3.4 → output: <strong>"Average Ingredients per Recipe: 3.4"</strong><br><br>Without it, Python might print something like 3.4000000000000002 due to floating point representation.`
-  },
-
-  // ── DESIGN & REPORT ──────────────────────────────────────────────────
-  {
-    tags: ['design'],
-    badge: 'design', label: 'Design Doc',
-    difficulty: 'easy',
-    q: "Your test case table has a mapping error in Section 3.4 Task Coverage. Task 2 maps to tests T016–T019 and Task 3 maps to T026–T029, but you only have 25 tests. Did you notice this?",
-    answer: `Yes — the task coverage table in Section 3.4 contains a mapping inconsistency. The tests are numbered T001–T025 but the table references T026–T029 for Task 3, which don't exist. The correct mapping should have been:<br><br>
-    <strong>Task 1:</strong> T001–T010 (validation tests)<br>
-    <strong>Task 2:</strong> T011–T016 (storage/display)<br>
-    <strong>Task 3:</strong> T021–T023 (file handling)<br>
-    <strong>Task 4:</strong> T017–T025 (advanced features)<br><br>
-    This was a numbering oversight during final document assembly.`,
-    tip: "Be upfront about this. Saying 'I noticed this afterwards' is much better than being caught off-guard. Markers appreciate honesty."
-  },
-  {
-    tags: ['design'],
-    badge: 'design', label: 'Design Doc',
-    difficulty: 'easy',
-    q: "Why did you use tuples to store each ingredient (e.g. <code>('Chicken', 500.0, 'g')</code>) instead of a dictionary like <code>{'name': 'Chicken', 'qty': 500.0, 'unit': 'g'}</code>?",
-    answer: `<strong>Tuples</strong> are used because the structure is fixed — every ingredient always has exactly 3 parts in the same order: name, quantity, unit. Tuples are:<br><br>
-    • <strong>Immutable</strong> — ingredient data shouldn't change accidentally<br>
-    • <strong>More memory efficient</strong> than dictionaries<br>
-    • Accessed by position (item[0], item[1], item[2]) which is consistent throughout the code<br><br>
-    A dictionary would make sense if the structure varied or if named access like <span class="code">ing['name']</span> was significantly clearer. Both approaches are valid; tuples were chosen for simplicity and immutability.`,
-    tip: "Your design document Section 4 explains this — reference it directly."
-  },
-  {
-    tags: ['design'],
-    badge: 'design', label: 'Design Doc',
-    difficulty: 'medium',
-    q: "Your pseudocode in the design section says <code>RETURN 'RCP' + new_num zero-padded to 3 digits</code>. How did you actually implement the zero-padding in code?",
-    code: `if new_num < 10:\n    return "RCP00" + str(new_num)\nelif new_num < 100:\n    return "RCP0" + str(new_num)\nelse:\n    return "RCP" + str(new_num)`,
-    answer: `The implementation uses <strong>conditional string concatenation</strong> to manually add the correct number of zeros. Python also has a built-in method for this: <span class="code">str(new_num).zfill(3)</span> which zero-pads to 3 digits automatically — so <span class="code">"RCP" + str(8).zfill(3)</span> → <strong>"RCP008"</strong>. Both approaches produce identical results; the explicit if/elif approach was chosen because it doesn't require knowing about zfill.`
-  },
-  {
-    tags: ['design'],
-    badge: 'design', label: 'Design Doc',
-    difficulty: 'easy',
-    q: "In your AI Use Declaration you mention using AI to understand errors, not just copy fixes. Can you give a specific example of something you learned this way?",
-    answer: `One example from the declaration: when the file loading function wasn't reconstructing ingredients correctly, AI explained <strong>type conversion and string parsing</strong> — specifically why splitting a string always gives strings, and that <span class="code">float(item[1])</span> is needed to convert the quantity back from text to a number. This is why <span class="code">parse_saved_ingredients()</span> explicitly calls <span class="code">float(item[1])</span> rather than keeping it as a string.`,
-    tip: "Be specific and confident here. You declared your AI use transparently — that's the correct academic practice."
-  },
-
-  // ── TRICKY / BUGS ────────────────────────────────────────────────────
-  {
-    tags: ['tricky'],
-    badge: 'tricky', label: 'Tricky',
-    difficulty: 'hard',
-    q: "What happens if someone enters a time like <code>'0a:30'</code>? Trace through <code>get_time()</code> step by step.",
-    code: `time_val = "0a:30"\nlen("0a:30") == 5  # True\ntime_val[2] == ":"  # True\nparts = ["0a", "30"]\nhours = int("0a")  # ← ?`,
-    answer: `<span class="code">"0a:30"</span> passes the first check (length 5, colon at position 2). Then it splits into <span class="code">["0a", "30"]</span>. When <span class="code">int("0a")</span> is called, Python raises a <strong>ValueError</strong> because "0a" is not a valid integer.<br><br>This is caught by the <span class="code">except ValueError</span> block, which prints: <strong>"Error: Use numbers for hours and minutes."</strong> — and the loop prompts again. So the program handles it correctly, just via the exception handler rather than the format check.`
-  },
-  {
-    tags: ['tricky'],
-    badge: 'tricky', label: 'Tricky',
-    difficulty: 'hard',
-    q: "If a user enters an ingredient name containing a comma — like <code>Salt, Pepper mix, 2, tsp</code> — what happens in <code>get_single_ingredient()</code>?",
-    code: `name, qty_str, unit = input(...).split(",")`,
-    answer: `<span class="code">.split(",")</span> returns 4 parts: <span class="code">["Salt", " Pepper mix", " 2", " tsp"]</span>. Python tries to unpack 4 values into 3 variables → raises <strong>ValueError</strong>.<br><br>The first <span class="code">except ValueError</span> catches it and prints: <strong>"Error: Use format Name, Quantity, Unit. Don't forget commas!"</strong>. The user is re-prompted.<br><br>This is a known limitation — ingredient names containing commas cannot be entered. A fix would use <span class="code">.split(",", 2)</span> to split only on the first two commas.`,
-    tip: "This is a great edge case to mention proactively — it shows deep understanding of string splitting."
-  },
-  {
-    tags: ['tricky'],
-    badge: 'tricky', label: 'Tricky',
-    difficulty: 'hard',
-    q: "After deleting RCP003, if you call <code>generate_recipe_id()</code>, does it return RCP003 again or RCP006 (assuming RCP005 is the highest)?",
-    answer: `It returns <strong>RCP006</strong>. The function finds the <em>maximum</em> existing ID number and increments it. Since RCP005 is still in the database, max_num = 5, new_num = 6 → RCP006.<br><br>RCP003 is <strong>never re-used</strong>. This is intentional — if any exported files or external references used RCP003, re-assigning it to a different recipe would create confusion. Gaps in IDs are acceptable.`
-  },
-  {
-    tags: ['tricky'],
-    badge: 'tricky', label: 'Tricky',
-    difficulty: 'medium',
-    q: "In <code>view_single_recipe()</code>, you use <code>tag_str.strip(', ')</code> to clean up the trailing comma. Does this always work correctly?",
-    code: `for t in rec["tags"]: tag_str += t + ", "\nprint(f"Tags: {tag_str.strip(', ')}")`,
-    answer: `<span class="code">.strip(', ')</span> removes any combination of comma and space characters from both <em>ends</em> of the string. For most cases it works — e.g. <span class="code">"spicy, vegan, "</span> → <span class="code">"spicy, vegan"</span>.<br><br>However, if a tag itself starts or ends with a comma or space (e.g. a tag named "quick,"), strip would incorrectly trim characters from the first tag too. A more robust approach: <span class="code">", ".join(rec["tags"])</span> which eliminates the trailing separator problem entirely.`,
-    tip: "Mentioning ', '.join() as an improvement shows you know Pythonic string handling."
-  },
-  {
-    tags: ['tricky'],
-    badge: 'tricky', label: 'Tricky',
-    difficulty: 'medium',
-    q: "The <code>main_menu()</code> function uses <code>if __name__ == '__main__'</code> at the bottom. What does this mean and why is it good practice?",
-    code: `if __name__ == "__main__":\n    main_menu()`,
-    answer: `<span class="code">__name__</span> is a special Python variable. When you <strong>run the file directly</strong>, Python sets it to <span class="code">"__main__"</span>. When another file <strong>imports</strong> this file, <span class="code">__name__</span> is set to the module's filename instead.<br><br>This guard ensures <span class="code">main_menu()</span> only runs when the file is executed directly — not if someone imports your functions into another program. It's standard best practice for any Python script with a main entry point.`
-  }
-];
-
-let currentFilter = 'all';
-let revealedCount = 0;
-let revealedSet = new Set();
-
-function countByTag(tag) {
-  if (tag === 'all') return questions.length;
-  return questions.filter(q => q.tags.includes(tag)).join('') || questions.filter(q => q.tags.includes(tag)).length;
+function updateScore() {
+  const pct = attempted > 0 ? Math.round((correct/attempted)*100) : 0;
+  document.getElementById('scoreDisplay').textContent = correct + ' / ' + attempted;
+  document.getElementById('scoreBar').style.width = pct + '%';
 }
 
-function updateCounts() {
-  const tags = ['all','task1','task2','task3','task4','design','tricky'];
-  tags.forEach(t => {
-    const count = t === 'all' ? questions.length : questions.filter(q => q.tags.includes(t)).length;
-    const el = document.getElementById('c-' + t);
-    if (el) el.textContent = count;
-  });
+function showSession(n) {
+  document.querySelectorAll('.session-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  document.querySelectorAll('.tab')[n-1].classList.add('active');
 }
 
-function filter(tag) {
-  currentFilter = tag;
-  document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tag-btn').forEach(b => {
-    if (b.getAttribute('onclick') === `filter('${tag}')`) b.classList.add('active');
-  });
-  renderCards();
-}
+function checkTF(btn, qid, correctVal) {
+  if (answered[qid]) return;
+  answered[qid] = true;
+  attempted++;
 
-function toggleAnswer(idx) {
-  const ans = document.getElementById('ans-' + idx);
-  const btn = document.getElementById('btn-' + idx);
-  if (ans.classList.contains('visible')) {
-    ans.classList.remove('visible');
-    btn.textContent = 'Show Answer';
+  const isTrue = btn.classList.contains('true-btn');
+  const isCorrect = (isTrue === correctVal);
+  const fb = document.getElementById('fb-' + qid);
+  const item = document.getElementById(qid);
+  const btns = item.querySelectorAll('.tf-btn');
+
+  btns.forEach(b => b.disabled = true);
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    correct++;
+    fb.classList.add('show', 'correct-fb');
+    fb.textContent = '✓ ' + fb.textContent;
   } else {
-    ans.classList.add('visible');
-    btn.textContent = 'Hide Answer';
-    if (!revealedSet.has(idx)) {
-      revealedSet.add(idx);
-      revealedCount++;
-    }
-    updateStats();
+    btn.classList.add('wrong');
+    // highlight correct
+    btns.forEach(b => {
+      if ((b.classList.contains('true-btn') && correctVal) || (b.classList.contains('false-btn') && !correctVal)) {
+        b.classList.add('correct');
+      }
+    });
+    fb.classList.add('show', 'wrong-fb');
   }
+  updateScore();
 }
 
-function updateStats() {
-  const visible = currentFilter === 'all' ? questions.length : questions.filter(q => q.tags.includes(currentFilter)).length;
-  document.getElementById('stat-total').textContent = visible;
-  document.getElementById('stat-revealed').textContent = revealedSet.size;
-  const pct = questions.length > 0 ? Math.round((revealedSet.size / questions.length) * 100) : 0;
-  document.getElementById('stat-pct').textContent = pct + '%';
-  document.getElementById('prog-bar').style.width = pct + '%';
-  document.getElementById('prog-label').textContent = `${revealedSet.size} of ${questions.length} revealed`;
-}
+function checkMCQ(opt, qid, chosen) {
+  if (answered[qid]) return;
+  answered[qid] = true;
+  attempted++;
 
-function renderCards() {
-  const container = document.getElementById('cards-container');
-  const filtered = currentFilter === 'all' ? questions : questions.filter(q => q.tags.includes(currentFilter));
+  const item = document.getElementById(qid);
+  const fb = document.getElementById('fb-' + qid);
+  const opts = item.querySelectorAll('.mcq-opt');
 
-  if (filtered.length === 0) {
-    container.innerHTML = '<div class="no-results">No questions in this category.</div>';
-    return;
+  opts.forEach(o => { o.style.pointerEvents = 'none'; });
+
+  const isCorrect = opt.dataset.correct === 'true';
+  if (isCorrect) {
+    opt.classList.add('correct-opt');
+    correct++;
+    fb.classList.add('show', 'correct-fb');
+  } else {
+    opt.classList.add('wrong-opt');
+    opts.forEach(o => { if (o.dataset.correct === 'true') o.classList.add('correct-opt'); });
+    fb.classList.add('show', 'wrong-fb');
   }
-
-  container.innerHTML = filtered.map((q, i) => {
-    const globalIdx = questions.indexOf(q);
-    const diffClass = q.difficulty === 'hard' ? 'hard' : q.difficulty === 'medium' ? 'medium' : 'easy';
-    const diffLabel = q.difficulty.charAt(0).toUpperCase() + q.difficulty.slice(1);
-    const codeBlock = q.code ? `<div class="code-snip">${q.code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : '';
-    const tipBlock = q.tip ? `<div class="tip">${q.tip}</div>` : '';
-    const isVisible = revealedSet.has(globalIdx);
-    return `
-    <div class="card">
-      <div class="card-meta">
-        <span class="badge badge-${q.badge}">${q.label}</span>
-        <span class="difficulty ${diffClass}">${diffLabel}</span>
-      </div>
-      <div class="question">${q.q}</div>
-      ${codeBlock}
-      <button class="reveal-btn" id="btn-${globalIdx}" onclick="toggleAnswer(${globalIdx})">${isVisible ? 'Hide Answer' : 'Show Answer'}</button>
-      <div class="answer ${isVisible ? 'visible' : ''}" id="ans-${globalIdx}">
-        ${q.answer}
-        ${tipBlock}
-      </div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('stat-total').textContent = filtered.length;
-  updateStats();
+  updateScore();
 }
 
-updateCounts();
-renderCards();
-updateStats();
+function checkFill(btn, qid, answers) {
+  if (answered[qid]) return;
+  const input = btn.previousElementSibling.previousElementSibling || btn.previousElementSibling;
+  // find input in same wrap
+  const wrap = btn.parentElement;
+  const inp = wrap.querySelector('.fill-input');
+  const val = inp.value.trim().toLowerCase();
+  const resultEl = wrap.querySelector('.fill-result');
+  const fb = document.getElementById('fb-' + qid);
+
+  if (!val) return;
+  answered[qid] = true;
+  attempted++;
+  btn.disabled = true;
+  inp.disabled = true;
+
+  const isCorrect = answers.some(a => val.includes(a.toLowerCase()) || a.toLowerCase().includes(val));
+  if (isCorrect) {
+    inp.classList.add('correct-input');
+    resultEl.textContent = '✓ Correct!';
+    resultEl.style.color = 'var(--green)';
+    correct++;
+    fb.classList.add('show', 'correct-fb');
+  } else {
+    inp.classList.add('wrong-input');
+    resultEl.textContent = '✗ Incorrect';
+    resultEl.style.color = 'var(--red)';
+    fb.classList.add('show', 'wrong-fb');
+  }
+  updateScore();
+}
+
+function toggleHint(btn) {
+  const hint = btn.nextElementSibling;
+  hint.classList.toggle('show');
+  btn.textContent = hint.classList.contains('show') ? 'Hide Hint / ඉඟිය සඟවන්න' : 'Show Hint / ඉඟිය';
+}
+
+function resetAll() {
+  if (!confirm('Reset all answers? / සියලු පිළිතුරු නැවත සකසන්නද?')) return;
+  Object.keys(answered).forEach(k => delete answered[k]);
+  correct = 0; attempted = 0;
+  updateScore();
+
+  document.querySelectorAll('.tf-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong','selected-true','selected-false');
+  });
+  document.querySelectorAll('.mcq-opt').forEach(o => {
+    o.style.pointerEvents = '';
+    o.classList.remove('selected','correct-opt','wrong-opt');
+  });
+  document.querySelectorAll('.fill-input').forEach(i => {
+    i.disabled = false; i.value = '';
+    i.classList.remove('correct-input','wrong-input');
+  });
+  document.querySelectorAll('.check-btn').forEach(b => b.disabled = false);
+  document.querySelectorAll('.fill-result').forEach(r => r.textContent = '');
+  document.querySelectorAll('.short-textarea').forEach(t => t.value = '');
+  document.querySelectorAll('.q-feedback').forEach(f => {
+    f.classList.remove('show','correct-fb','wrong-fb');
+    // restore original text if needed
+  });
+  document.querySelectorAll('.hint-text').forEach(h => h.classList.remove('show'));
+  document.querySelectorAll('.hint-btn').forEach(b => b.textContent = 'Show Hint / ඉඟිය');
+}
 </script>
 </body>
 </html>
